@@ -13,7 +13,8 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:'Poppins',system-ui,sans-serif;
-  background:radial-gradient(1200px 600px at 10% -10%,#2a1a63 0%,transparent 60%),
+  background:url(bg.svg) 0 0/clamp(400px,42vw,600px) auto repeat,
+             radial-gradient(1200px 600px at 10% -10%,#2a1a63 0%,transparent 60%),
              radial-gradient(900px 500px at 100% 0%,#4a1646 0%,transparent 55%),
              var(--bg);
   color:var(--text);
@@ -123,6 +124,77 @@ main{max-width:1200px;margin:0 auto;padding:12px 20px 60px}
   border:none;background:rgba(15,11,30,.7);color:#fff;font-size:1.5rem;cursor:pointer;
 }
 footer{text-align:center;color:var(--muted);padding:30px 0 40px;font-size:.85rem}
+
+/* =========================================================
+   TEXTURA + RELEVO NAS FONTES
+   Textura: linhas de camada, como numa peça impressa em 3D.
+   Relevo: sombras empilhadas (extrusão) e brilho no topo.
+   ========================================================= */
+:root{
+  --lines:repeating-linear-gradient(0deg,rgba(0,0,0,.32) 0 1px,transparent 1px 4px);
+  --lines-sm:repeating-linear-gradient(0deg,rgba(0,0,0,.17) 0 1px,transparent 1px 3px);
+}
+
+/* Título principal: duas linhas, extrusão 3D */
+h1{
+  display:flex;flex-direction:column;align-items:center;gap:.08em;
+  font-size:clamp(2.4rem,8vw,4.6rem);line-height:1.02;letter-spacing:-.01em;
+  filter:drop-shadow(0 -1px 0 rgba(255,255,255,.35))
+         drop-shadow(1px 1px 0 #4a2a8a) drop-shadow(2px 2px 0 #3d2273)
+         drop-shadow(3px 3px 0 #301a5c) drop-shadow(4px 4px 0 #241347)
+         drop-shadow(0 14px 16px rgba(0,0,0,.55));
+}
+h1 span{
+  display:block;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+}
+h1 .l1{background:var(--lines),linear-gradient(180deg,#ffffff 0%,#cfc6ff 100%)}
+h1 .l2{
+  font-size:.62em;letter-spacing:.05em;
+  background:var(--lines),linear-gradient(90deg,var(--c1),var(--c2));
+}
+
+/* Texto claro (títulos menores e números) */
+.body h3,.lb-info h2,.stat b,.lb-info dd,.panel h2{
+  background:var(--lines),linear-gradient(180deg,#ffffff,#d9d2ff);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 -1px 0 rgba(255,255,255,.30)) drop-shadow(0 2px 0 rgba(0,0,0,.55)) drop-shadow(0 4px 6px rgba(0,0,0,.40));
+}
+
+/* Texto de apoio (cinza-lilás) */
+.sub,.stat small,.lb-info p,.lb-info dt,footer,.empty,label,.hint{
+  background:var(--lines-sm),linear-gradient(var(--muted),var(--muted));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.65));
+}
+.tag{
+  background:var(--lines-sm),linear-gradient(var(--c3),var(--c3));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.65));
+}
+
+/* Etiquetas com fundo próprio: o fundo vai para ::before, o texto ganha textura */
+.eyebrow,.pill,.badge,.count,.chip,.counter{
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.6));
+}
+.eyebrow,.pill,.chip{position:relative;isolation:isolate}
+.pill{display:inline-block}
+.eyebrow::before,.pill::before,.badge::before,.count::before,.chip.active::before,.counter::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;
+}
+.eyebrow{background:var(--lines-sm),linear-gradient(var(--c3),var(--c3))}
+.eyebrow::before{background:rgba(53,224,194,.12)}
+.pill{background:var(--lines-sm),linear-gradient(var(--muted),var(--muted))}
+.pill::before{background:rgba(255,255,255,.07)}
+.badge,.count,.counter{background:var(--lines-sm),linear-gradient(var(--text),var(--text))}
+.badge::before,.count::before{background:rgba(15,11,30,.75)}
+.counter::before{background:rgba(15,11,30,.7)}
+.chip,.chip.active{background:var(--lines-sm),linear-gradient(var(--text),var(--text))}
+.chip.active::before{background:linear-gradient(90deg,var(--c1),var(--c4))}
+
+/* Campos de texto: relevo leve (não aceitam textura) */
+input,textarea,select{text-shadow:0 1px 0 rgba(0,0,0,.65)}
 
 @media(max-width:720px){
   .lb-card{padding-right:0;border-radius:20px;min-width:min(280px,96vw)}
