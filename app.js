@@ -27,7 +27,7 @@ function render(){
   const q = $("#search").value.trim().toLowerCase();
   let lista = BONECOS.map((b,i)=>({...b,_i:i})).filter(b=>{
     const okCat = categoriaAtiva==="Todos" || b.categoria===categoriaAtiva;
-    const texto = [b.nome,b.filamento,b.categoria,b.descricao,...(b.tags||[])].join(" ").toLowerCase();
+    const texto = [b.nome,b.categoria,b.descricao,...(b.tags||[])].join(" ").toLowerCase();
     return okCat && texto.includes(q);
   });
   const ord = $("#sort").value;
@@ -46,7 +46,7 @@ function render(){
       <div class="body">
         <h3>${esc(b.nome)}</h3>
         <div class="meta">
-          <span class="pill"><i class="swatch" style="background:${esc(b.cor||"#888")}"></i>${esc(b.filamento)}</span>
+          <span class="pill">${fmtData(b.data)}</span>
           ${b.tempo?`<span class="pill">⏱ ${fmtHoras(b.tempo)}</span>`:""}
         </div>
         <div class="tags">${(b.tags||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>
@@ -62,11 +62,11 @@ function chips(){
 
 function stats(){
   const horas = BONECOS.reduce((s,b)=>s+(b.tempo||0),0);
-  const filamentos = new Set(BONECOS.map(b=>b.filamento)).size;
+  const categorias = new Set(BONECOS.map(b=>b.categoria)).size;
   $("#stats").innerHTML = `
     <div class="stat"><b>${BONECOS.length}</b><small>bonecos</small></div>
     <div class="stat"><b>${Math.round(horas)}h</b><small>de impressão</small></div>
-    <div class="stat"><b>${filamentos}</b><small>filamentos</small></div>`;
+    <div class="stat"><b>${categorias}</b><small>categorias</small></div>`;
 }
 
 /* ---------- Galeria (esquerda) + info (direita) ---------- */
@@ -102,9 +102,7 @@ function abrir(i){
     <h2>${esc(b.nome)}</h2>
     <p>${esc(b.descricao||"")}</p>
     <dl>
-      <dt>Filamento</dt><dd><i class="swatch" style="background:${esc(b.cor||"#888")}"></i>${esc(b.filamento)}</dd>
       ${b.tempo?`<dt>Tempo</dt><dd>${fmtHoras(b.tempo)}</dd>`:""}
-      ${b.altura?`<dt>Altura</dt><dd>${b.altura} cm</dd>`:""}
       <dt>Impresso em</dt><dd>${fmtData(b.data)}</dd>
     </dl>
     <div class="tags">${(b.tags||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>`;

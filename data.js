@@ -1,10 +1,6 @@
 // ============================================================
-//  SEUS BONECOS — edite só este arquivo para adicionar peças.
-//
-//  Como adicionar um boneco:
-//   1. Coloque as fotos na pasta "fotos/" (ex.: fotos/dragao-1.jpg)
-//   2. Copie um bloco abaixo e preencha os campos.
-//   3. Faça commit no GitHub — o site atualiza sozinho.
+//  SEUS BONECOS — edite só este arquivo para adicionar peças
+//  (ou use a página admin.html, que faz isso por você).
 //
 //  "fotos" é uma lista: a primeira vira a capa do card e todas
 //  aparecem na galeria. Sem fotos, aparece um cartão colorido com emoji.
@@ -16,10 +12,8 @@ const BONECOS = [
     emoji: "🐉",
     categoria: "Fantasia",
     data: "2026-09-20",
-    filamento: "PLA Verde Seda",
     cor: "#35e0c2",
     tempo: 14.5,            // horas de impressão
-    altura: 18,             // cm
     descricao: "Dragão articulado impresso em peça única, sem suportes.",
     tags: ["articulado", "presente"]
   },
@@ -29,10 +23,8 @@ const BONECOS = [
     emoji: "🤖",
     categoria: "Sci-fi",
     data: "2026-09-12",
-    filamento: "PETG Azul",
     cor: "#7c5cff",
     tempo: 6,
-    altura: 10,
     descricao: "Robozinho estilo anos 50, pintado à mão nos detalhes.",
     tags: ["pintado", "mesa"]
   },
@@ -42,10 +34,8 @@ const BONECOS = [
     emoji: "🐱",
     categoria: "Animais",
     data: "2026-08-30",
-    filamento: "PLA Laranja",
     cor: "#ffb627",
     tempo: 3.5,
-    altura: 7,
     descricao: "Gato enrolado dormindo. Impressão rápida e fofa.",
     tags: ["fofo", "rápido"]
   }
