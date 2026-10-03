@@ -2,8 +2,8 @@
   --bg:#0f0b1e;
   --bg2:#17122e;
   --card:#1d1740;
-  --text:#f4f1ff;
-  --muted:#a59fcb;
+  --text:#ffffff;
+  --muted:#f0ecff;
   --c1:#ff4d8d;
   --c2:#ffb627;
   --c3:#35e0c2;
@@ -13,7 +13,8 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:'Poppins',system-ui,sans-serif;
-  background:url(bg.svg?v=2) 0 0/clamp(260px,26vw,340px) auto repeat,
+  background:url(bg.svg?v=3) 0 0/600px 600px repeat,
+             url(bg.svg?v=3) 173px 291px/437px 437px repeat,
              radial-gradient(1200px 600px at 10% -10%,#2a1a63 0%,transparent 60%),
              radial-gradient(900px 500px at 100% 0%,#4a1646 0%,transparent 55%),
              var(--bg);
@@ -131,8 +132,8 @@ footer{text-align:center;color:var(--muted);padding:30px 0 40px;font-size:.85rem
    Relevo: sombras empilhadas (extrusão) e brilho no topo.
    ========================================================= */
 :root{
-  --lines:repeating-linear-gradient(0deg,rgba(0,0,0,.32) 0 1px,transparent 1px 4px);
-  --lines-sm:repeating-linear-gradient(0deg,rgba(0,0,0,.17) 0 1px,transparent 1px 3px);
+  --lines:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 4px);
+  --lines-sm:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0 1px,transparent 1px 3px);
 }
 
 /* Título principal: duas linhas, extrusão 3D */
@@ -148,7 +149,7 @@ h1 span{
   display:block;
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
 }
-h1 .l1{background:var(--lines),linear-gradient(180deg,#ffffff 0%,#cfc6ff 100%)}
+h1 .l1{background:var(--lines),linear-gradient(180deg,#ffffff 0%,#ece8ff 100%)}
 h1 .l2{
   font-size:.62em;letter-spacing:.05em;
   background:var(--lines),linear-gradient(90deg,var(--c1),var(--c2));
@@ -156,7 +157,7 @@ h1 .l2{
 
 /* Texto claro (títulos menores e números) */
 .body h3,.lb-info h2,.stat b,.lb-info dd,.panel h2{
-  background:var(--lines),linear-gradient(180deg,#ffffff,#d9d2ff);
+  background:var(--lines),linear-gradient(180deg,#ffffff,#f1eeff);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
   filter:drop-shadow(0 -1px 0 rgba(255,255,255,.30)) drop-shadow(0 2px 0 rgba(0,0,0,.55)) drop-shadow(0 4px 6px rgba(0,0,0,.40));
 }
@@ -168,7 +169,7 @@ h1 .l2{
   filter:drop-shadow(0 1px 0 rgba(0,0,0,.65));
 }
 .tag{
-  background:var(--lines-sm),linear-gradient(var(--c3),var(--c3));
+  background:var(--lines-sm),linear-gradient(var(--text),var(--text));
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
   filter:drop-shadow(0 1px 0 rgba(0,0,0,.65));
 }
@@ -180,17 +181,18 @@ h1 .l2{
 }
 .eyebrow,.pill,.chip{position:relative;isolation:isolate}
 .pill{display:inline-block}
-.eyebrow::before,.pill::before,.badge::before,.count::before,.chip.active::before,.counter::before{
+.eyebrow::before,.pill::before,.badge::before,.count::before,.chip::before,.counter::before{
   content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;
 }
-.eyebrow{background:var(--lines-sm),linear-gradient(var(--c3),var(--c3))}
-.eyebrow::before{background:rgba(53,224,194,.12)}
+.eyebrow{background:var(--lines-sm),linear-gradient(var(--text),var(--text))}
+.eyebrow::before{background:#0b4b49;border:1px solid rgba(53,224,194,.6)}
 .pill{background:var(--lines-sm),linear-gradient(var(--muted),var(--muted))}
-.pill::before{background:rgba(255,255,255,.07)}
+.pill::before{background:#3a2f80}
 .badge,.count,.counter{background:var(--lines-sm),linear-gradient(var(--text),var(--text))}
-.badge::before,.count::before{background:rgba(15,11,30,.75)}
-.counter::before{background:rgba(15,11,30,.7)}
+.badge::before,.count::before{background:#0f0b1e;border:1px solid rgba(255,255,255,.25)}
+.counter::before{background:#0f0b1e;border:1px solid rgba(255,255,255,.25)}
 .chip,.chip.active{background:var(--lines-sm),linear-gradient(var(--text),var(--text))}
+.chip::before{background:#251d55}
 .chip.active::before{background:linear-gradient(90deg,var(--c1),var(--c4))}
 
 /* Campos de texto: relevo leve (não aceitam textura) */
@@ -202,6 +204,32 @@ h1 .l1,h1 .l2,.eyebrow,.pill,.badge,.count,.counter,.chip,.chip.active{
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;color:transparent;
 }
+
+/* =========================================================
+   CARDS EM RELEVO — totalmente opacos, com alto contraste
+   ========================================================= */
+.card,.stat,.lb-card,.panel{
+  background:linear-gradient(180deg,#2d2470 0%,#1d1740 55%,#171236 100%);
+  border:1px solid rgba(255,255,255,.30);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.30),
+             inset 0 -4px 0 rgba(0,0,0,.40),
+             0 4px 0 #07041a,
+             0 16px 30px -8px rgba(0,0,0,.85);
+}
+.card:hover{
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.38),
+             inset 0 -4px 0 rgba(0,0,0,.40),
+             0 4px 0 #07041a,
+             0 22px 40px -10px var(--accent,#7c5cff);
+}
+.thumb{border-bottom:2px solid rgba(0,0,0,.5);box-shadow:inset 0 -3px 6px rgba(0,0,0,.35)}
+.lb-info{background:transparent}
+#search,#sort{
+  background:#1d1740;border:1px solid rgba(255,255,255,.32);
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.18);
+}
+#search::placeholder{color:#e2ddff;text-shadow:none}
+.chip{border-color:rgba(255,255,255,.40)}
 
 @media(max-width:720px){
   .lb-card{padding-right:0;border-radius:20px;min-width:min(280px,96vw)}
