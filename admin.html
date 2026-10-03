@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Admin · Catálogo 3D</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .wrap{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+    .wrap h1{font-size:2rem;margin-bottom:6px}
+    .panel{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:22px;margin-top:22px}
+    .panel h2{font-size:1.1rem;margin-bottom:14px}
+    label{display:block;font-size:.8rem;color:var(--muted);margin:12px 0 5px;font-weight:500}
+    input,textarea,select{
+      width:100%;background:var(--bg2);color:var(--text);border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;padding:11px 14px;font:inherit;font-size:.92rem;outline:none;
+    }
+    input:focus,textarea:focus{border-color:var(--c4);box-shadow:0 0 0 3px rgba(124,92,255,.25)}
+    input[type=color]{padding:3px;height:44px;cursor:pointer}
+    textarea{min-height:90px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .btn{
+      border:none;border-radius:14px;padding:13px 22px;font:inherit;font-weight:600;font-size:.95rem;cursor:pointer;
+      background:linear-gradient(90deg,var(--c1),var(--c4));color:#fff;margin-top:18px;transition:.2s;
+    }
+    .btn:hover{filter:brightness(1.1)}
+    .btn:disabled{opacity:.5;cursor:wait}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.18)}
+    .btn.danger{background:#c0264a;padding:7px 14px;font-size:.8rem;margin:0}
+    .previews{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .previews img{width:84px;height:84px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
+    .log{margin-top:16px;font-size:.88rem;line-height:1.6;white-space:pre-wrap;color:var(--muted)}
+    .log.ok{color:var(--c3)} .log.err{color:#ff7a95}
+    .item{display:flex;align-items:center;gap:14px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07)}
+    .item:first-child{border-top:none}
+    .item img,.item .mini{width:52px;height:52px;border-radius:10px;object-fit:cover;flex:none;background:var(--bg2);display:grid;place-items:center;font-size:1.5rem}
+    .item b{flex:1;font-weight:600}
+    .item small{color:var(--muted);display:block;font-weight:400}
+    details summary{cursor:pointer;font-weight:600}
+    .hint{font-size:.78rem;color:var(--muted);margin-top:8px;line-height:1.5}
+    @media(max-width:560px){.row,.row3{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Admin do <span style="background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent">Catálogo</span></h1>
+  <p class="sub" style="font-size:.95rem">Envie fotos e dados de um novo boneco direto para o GitHub.</p>
+
+  <details class="panel" id="cfgPanel">
+    <summary>🔑 Conexão com o GitHub</summary>
+    <div class="row3">
+      <div><label>Usuário</label><input id="cOwner" value="enzoid95-beep"></div>
+      <div><label>Repositório</label><input id="cRepo" value="catalogo3d"></div>
+      <div><label>Branch</label><input id="cBranch" value="main"></div>
+    </div>
+    <label>Token de acesso (fine-grained)</label>
+    <input id="cToken" type="password" placeholder="github_pat_..." autocomplete="off">
+    <p class="hint">O token fica salvo só neste navegador. Crie-o em GitHub → Settings → Developer settings → Personal access tokens → Fine-grained, com acesso apenas ao repositório do catálogo e a permissão <b>Contents: Read and write</b>.</p>
+    <button class="btn ghost" id="saveCfg" type="button">Salvar e testar conexão</button>
+    <div class="log" id="cfgLog"></div>
+  </details>
+
+  <form class="panel" id="form">
+    <h2>➕ Novo boneco</h2>
+    <label>Nome *</label>
+    <input id="nome" required placeholder="Ex.: Dragão Articulado">
+    <div class="row">
+      <div><label>Categoria *</label><input id="categoria" list="cats" required placeholder="Ex.: Fantasia"><datalist id="cats"></datalist></div>
+      <div><label>Emoji (se não tiver foto)</label><input id="emoji" placeholder="🐉" maxlength="4"></div>
+    </div>
+    <div class="row">
+      <div><label>Filamento *</label><input id="filamento" required placeholder="Ex.: PLA Verde Seda"></div>
+      <div><label>Cor do filamento</label><input id="cor" type="color" value="#7c5cff"></div>
+    </div>
+    <div class="row3">
+      <div><label>Data da impressão</label><input id="data" type="date" required></div>
+      <div><label>Tempo (horas)</label><input id="tempo" type="number" step="0.1" min="0" placeholder="14.5"></div>
+      <div><label>Altura (cm)</label><input id="altura" type="number" step="0.1" min="0" placeholder="18"></div>
+    </div>
+    <label>Descrição</label>
+    <textarea id="descricao" placeholder="Conte um pouco sobre essa impressão..."></textarea>
+    <label>Tags (separadas por vírgula)</label>
+    <input id="tags" placeholder="articulado, presente">
+    <label>Fotos (a primeira vira a capa)</label>
+    <input id="fotos" type="file" accept="image/*" multiple>
+    <div class="previews" id="previews"></div>
+    <p class="hint">As fotos são redimensionadas automaticamente (máx. 1400 px) antes do envio.</p>
+    <button class="btn" id="send" type="submit">Publicar no catálogo</button>
+    <div class="log" id="log"></div>
+  </form>
+
+  <section class="panel">
+    <h2>📦 Bonecos publicados</h2>
+    <div id="list"><p class="hint">Conecte ao GitHub para ver a lista.</p></div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const LS = "catalogo-admin-cfg";
+let cfg = { owner:"enzoid95-beep", repo:"catalogo3d", branch:"main", token:"" };
+try { Object.assign(cfg, JSON.parse(localStorage.getItem(LS)||"{}")); } catch(e){}
+
+$("#cOwner").value = cfg.owner; $("#cRepo").value = cfg.repo; $("#cBranch").value = cfg.branch; $("#cToken").value = cfg.token;
+$("#data").value = new Date().toISOString().slice(0,10);
+if(!cfg.token) $("#cfgPanel").open = true;
+
+const esc = t => { const d=document.createElement("div"); d.textContent=t??""; return d.innerHTML; };
+function setLog(el,msg,cls=""){ el.textContent=msg; el.className="log "+cls; }
+
+/* ---------- GitHub API ---------- */
+async function gh(path, opts={}){
+  const r = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/${path}`, {
+    ...opts,
+    cache:"no-store",
+    headers:{ Accept:"application/vnd.github+json", Authorization:"Bearer "+cfg.token, "Content-Type":"application/json" }
+  });
+  if(!r.ok){
+    let m=""; try{ m=(await r.json()).message; }catch(e){}
+    const err = new Error(`GitHub ${r.status}: ${m||r.statusText}`); err.status=r.status; throw err;
+  }
+  return r.status===204 ? null : r.json();
+}
+async function getFile(path){
+  try { return await gh(`contents/${path}?ref=${encodeURIComponent(cfg.branch)}`); }
+  catch(e){ if(e.status===404) return null; throw e; }
+}
+function putFile(path, b64, message, sha){
+  return gh(`contents/${path}`, { method:"PUT", body: JSON.stringify({ message, content:b64, branch:cfg.branch, ...(sha?{sha}:{}) }) });
+}
+const utf8ToB64 = s => btoa(unescape(encodeURIComponent(s)));
+const b64ToUtf8 = b => decodeURIComponent(escape(atob(b.replace(/\n/g,""))));
+
+/* ---------- data.js ---------- */
+const HEADER =
+`// ============================================================
+//  Lista de bonecos do catálogo.
+//  Este arquivo é atualizado pela página admin.html — você
+//  também pode editá-lo à mão, se preferir.
+// ============================================================
+`;
+async function lerBonecos(){
+  const f = await getFile("data.js");
+  if(!f) return { arr:[], sha:null };
+  const txt = b64ToUtf8(f.content);
+  const m = txt.match(/const BONECOS\s*=\s*([\s\S]*\])\s*;?\s*$/);
+  if(!m) throw new Error("Não consegui ler o data.js (formato inesperado).");
+  return { arr: new Function("return "+m[1])(), sha:f.sha };
+}
+const gerarDataJs = arr => HEADER + "const BONECOS = " + JSON.stringify(arr,null,2) + ";\n";
+
+/* ---------- imagens ---------- */
+function redimensionar(file, max=1400){
+  return new Promise((res,rej)=>{
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = ()=>{
+      const k = Math.min(1, max/Math.max(img.width,img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width*k); c.height = Math.round(img.height*k);
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);
+      res(c.toDataURL("image/jpeg",0.85).split(",")[1]);
+    };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); rej(new Error("Não consegui ler a imagem "+file.name)); };
+    img.src = url;
+  });
+}
+const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") || "boneco";
+
+$("#fotos").addEventListener("change",e=>{
+  $("#previews").innerHTML = [...e.target.files].map(f=>`<img src="${URL.createObjectURL(f)}" alt="">`).join("");
+});
+
+/* ---------- lista ---------- */
+async function carregarLista(){
+  const box = $("#list");
+  if(!cfg.token){ box.innerHTML = `<p class="hint">Conecte ao GitHub para ver a lista.</p>`; return; }
+  box.innerHTML = `<p class="hint">Carregando...</p>`;
+  try{
+    const { arr } = await lerBonecos();
+    $("#cats").innerHTML = [...new Set(arr.map(b=>b.categoria))].map(c=>`<option value="${esc(c)}">`).join("");
+    if(!arr.length){ box.innerHTML = `<p class="hint">Nenhum boneco ainda.</p>`; return; }
+    box.innerHTML = arr.map((b,i)=>{
+      const cap = (b.fotos&&b.fotos[0]) || b.foto;
+      return `<div class="item">
+        ${cap?`<img src="${esc(cap)}?v=${Date.now()}" alt="" onerror="this.outerHTML='<div class=mini>${esc(b.emoji||"🧸")}</div>'">`:`<div class="mini">${esc(b.emoji||"🧸")}</div>`}
+        <b>${esc(b.nome)}<small>${esc(b.categoria)} · ${(b.fotos||(b.foto?[b.foto]:[])).length} foto(s)</small></b>
+        <button class="btn danger" data-nome="${esc(b.nome)}" data-data="${esc(b.data)}" type="button">Excluir</button>
+      </div>`; }).join("");
+  }catch(e){ box.innerHTML = `<p class="log err">${esc(e.message)}</p>`; }
+}
+
+$("#list").addEventListener("click", async e=>{
+  const btn = e.target.closest(".danger"); if(!btn) return;
+  if(!confirm(`Excluir "${btn.dataset.nome}" e suas fotos do catálogo?`)) return;
+  btn.disabled = true; btn.textContent = "Excluindo...";
+  try{
+    const { arr, sha } = await lerBonecos();
+    const idx = arr.findIndex(b=>b.nome===btn.dataset.nome && b.data===btn.dataset.data);
+    if(idx<0) throw new Error("Boneco não encontrado.");
+    const [rem] = arr.splice(idx,1);
+    for(const p of (rem.fotos||(rem.foto?[rem.foto]:[]))){
+      if(!p.startsWith("fotos/")) continue;
+      const f = await getFile(p);
+      if(f) await gh(`contents/${p}`, { method:"DELETE", body: JSON.stringify({ message:`Remove foto de ${rem.nome}`, sha:f.sha, branch:cfg.branch }) });
+    }
+    await putFile("data.js", utf8ToB64(gerarDataJs(arr)), `Remove ${rem.nome}`, sha);
+    await carregarLista();
+  }catch(err){ alert(err.message); btn.disabled=false; btn.textContent="Excluir"; }
+});
+
+/* ---------- config ---------- */
+$("#saveCfg").addEventListener("click", async ()=>{
+  cfg = { owner:$("#cOwner").value.trim(), repo:$("#cRepo").value.trim(), branch:$("#cBranch").value.trim()||"main", token:$("#cToken").value.trim() };
+  localStorage.setItem(LS, JSON.stringify(cfg));
+  const log = $("#cfgLog"); setLog(log,"Testando...");
+  try{
+    const r = await gh("");
+    if(r.permissions && r.permissions.push===false) throw new Error("O token não tem permissão de escrita (Contents: Read and write).");
+    setLog(log,`✓ Conectado a ${r.full_name}`,"ok");
+    $("#cfgPanel").open = false;
+    carregarLista();
+  }catch(e){ setLog(log,"✗ "+e.message,"err"); }
+});
+
+/* ---------- publicar ---------- */
+$("#form").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const log = $("#log"), btn = $("#send");
+  if(!cfg.token){ setLog(log,"Configure o token do GitHub primeiro (🔑 acima).","err"); $("#cfgPanel").open=true; return; }
+  btn.disabled = true;
+  try{
+    const nome = $("#nome").value.trim();
+    const arquivos = [...$("#fotos").files];
+    const base = slug(nome) + "-" + Date.now().toString(36);
+    const caminhos = [];
+    for(let i=0;i<arquivos.length;i++){
+      setLog(log,`Enviando foto ${i+1} de ${arquivos.length}...`);
+      const b64 = await redimensionar(arquivos[i]);
+      const path = `fotos/${base}-${i+1}.jpg`;
+      await putFile(path, b64, `Adiciona foto de ${nome}`);
+      caminhos.push(path);
+    }
+    setLog(log,"Atualizando o catálogo...");
+    const { arr, sha } = await lerBonecos();
+    const novo = {
+      nome, ...(caminhos.length?{fotos:caminhos}:{}),
+      emoji: $("#emoji").value.trim() || undefined,
+      categoria: $("#categoria").value.trim(),
+      data: $("#data").value,
+      filamento: $("#filamento").value.trim(),
+      cor: $("#cor").value,
+      tempo: $("#tempo").value ? +$("#tempo").value : undefined,
+      altura: $("#altura").value ? +$("#altura").value : undefined,
+      descricao: $("#descricao").value.trim(),
+      tags: $("#tags").value.split(",").map(t=>t.trim()).filter(Boolean)
+    };
+    arr.push(novo);
+    await putFile("data.js", utf8ToB64(gerarDataJs(arr)), `Adiciona ${nome}`, sha);
+    setLog(log,"✓ Publicado! O site leva de 1 a 2 minutos para atualizar.","ok");
+    e.target.reset(); $("#previews").innerHTML=""; $("#data").value = new Date().toISOString().slice(0,10); $("#cor").value="#7c5cff";
+    carregarLista();
+  }catch(err){ setLog(log,"✗ "+err.message,"err"); }
+  btn.disabled = false;
+});
+
+carregarLista();
+</script>
+</body>
+</html>
