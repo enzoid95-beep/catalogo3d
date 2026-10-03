@@ -2,6 +2,8 @@ const $ = (s) => document.querySelector(s);
 const grid = $("#grid"), empty = $("#empty"), chipsEl = $("#chips");
 let categoriaAtiva = "Todos";
 let galFotos = [], galIdx = 0, galBoneco = null, galI = 0;
+let galRatio = 1;
+const ratioCache = {};   // proporção (largura/altura) já conhecida de cada foto
 
 const PALETAS = [["#ff4d8d","#7c5cff"],["#ffb627","#ff4d8d"],["#35e0c2","#7c5cff"],["#7c5cff","#35e0c2"]];
 
@@ -85,6 +87,35 @@ function renderGaleria(){
       <button class="th ${k===galIdx?"on":""}" data-k="${k}" aria-label="Foto ${k+1}">
         <img src="${esc(f)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
       </button>`).join("")}</div>`:""}`;
+
+  // tamanho provisório (usa a proporção já conhecida da foto, se houver)
+  galRatio = ratioCache[atual] || galRatio || 1;
+  encaixar(galRatio);
+  const im = $("#lbImg .stage img");
+  if(im){
+    im.loading = "eager";
+    const aplicar = ()=>{
+      if(!im.naturalWidth) return;
+      galRatio = ratioCache[atual] = im.naturalWidth / im.naturalHeight;
+      encaixar(galRatio);
+    };
+    if(im.complete) aplicar(); else im.addEventListener("load",aplicar);
+  }
+}
+
+// Ajusta a área da foto à proporção dela (horizontal, vertical ou quadrada),
+// ocupando o maior espaço possível, sem faixas vazias nas laterais.
+function encaixar(ratio){
+  const stage = $("#lbImg .stage"); if(!stage) return;
+  const mob = innerWidth <= 720;
+  const thumbsH = galFotos.length>1 ? 96 : 0;
+  const maxW = mob ? innerWidth*0.96 : Math.min(innerWidth*0.96,1500) - 360;
+  const maxH = mob ? innerHeight*0.78 : Math.min(innerHeight*0.92,920) - thumbsH;
+  let W = maxW, H = W/ratio;
+  if(H > maxH){ H = maxH; W = H*ratio; }
+  stage.style.width = Math.floor(W)+"px";
+  stage.style.height = Math.floor(H)+"px";
+  $("#lightbox").dataset.orient = ratio>1.05 ? "horizontal" : (ratio<0.95 ? "vertical" : "quadrada");
 }
 
 function mover(d){
@@ -137,6 +168,8 @@ $("#lbImg").addEventListener("touchend",e=>{
   const dx=e.changedTouches[0].clientX-x0; x0=null;
   if(Math.abs(dx)>40) mover(dx<0?1:-1);
 });
+
+window.addEventListener("resize",()=>{ if(!$("#lightbox").hidden) encaixar(galRatio); });
 
 $("#year").textContent = new Date().getFullYear();
 stats(); chips(); render();
