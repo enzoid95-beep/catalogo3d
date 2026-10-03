@@ -240,6 +240,9 @@ h1 .l1,h1 .l2{
 #search::placeholder{color:#e2ddff;text-shadow:none}
 .chip{border-color:rgba(255,255,255,.40)}
 
+/* Barra de filtros por categoria oculta */
+.chips{display:none}
+
 @media(max-width:720px){
   .lb-card{padding-right:0;border-radius:20px;min-width:min(280px,96vw)}
   .lb-info{position:static;width:auto;overflow:visible;padding:24px 20px}
