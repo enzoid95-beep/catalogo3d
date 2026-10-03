@@ -13,7 +13,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:'Poppins',system-ui,sans-serif;
-  background:url(bg.svg) 0 0/clamp(400px,42vw,600px) auto repeat,
+  background:url(bg.svg?v=2) 0 0/clamp(260px,26vw,340px) auto repeat,
              radial-gradient(1200px 600px at 10% -10%,#2a1a63 0%,transparent 60%),
              radial-gradient(900px 500px at 100% 0%,#4a1646 0%,transparent 55%),
              var(--bg);
@@ -195,6 +195,13 @@ h1 .l2{
 
 /* Campos de texto: relevo leve (não aceitam textura) */
 input,textarea,select{text-shadow:0 1px 0 rgba(0,0,0,.65)}
+
+/* Garante o recorte do fundo no formato das letras (o atalho "background"
+   acima redefine o recorte, por isso ele é reafirmado aqui no final) */
+h1 .l1,h1 .l2,.eyebrow,.pill,.badge,.count,.counter,.chip,.chip.active{
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
 
 @media(max-width:720px){
   .lb-card{padding-right:0;border-radius:20px;min-width:min(280px,96vw)}
