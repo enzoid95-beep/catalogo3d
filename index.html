@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo de Impressões 3D</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Minha coleção</p>
+      <h1>Catálogo de <span>Impressões 3D</span></h1>
+      <p class="sub">Todos os bonecos que saíram da mesa de impressão.</p>
+      <div class="stats" id="stats"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="toolbar">
+      <input id="search" type="search" placeholder="Buscar boneco, filamento, tag..." aria-label="Buscar">
+      <div class="chips" id="chips"></div>
+      <select id="sort" aria-label="Ordenar">
+        <option value="recent">Mais recentes</option>
+        <option value="name">Nome (A–Z)</option>
+        <option value="time">Maior tempo de impressão</option>
+      </select>
+    </section>
+
+    <section class="grid" id="grid"></section>
+    <p class="empty" id="empty" hidden>Nenhum boneco encontrado 😢</p>
+  </main>
+
+  <div class="lightbox" id="lightbox" hidden>
+    <div class="lb-card">
+      <button class="lb-close" id="lbClose" aria-label="Fechar">×</button>
+      <div class="lb-img" id="lbImg"></div>
+      <div class="lb-info" id="lbInfo"></div>
+    </div>
+  </div>
+
+  <footer>Feito com ♥ e filamento · <span id="year"></span></footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
