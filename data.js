@@ -22,22 +22,6 @@ const BONECOS = [
     ]
   },
   {
-    "nome": "Gatinho Dorminhoco",
-    "fotos": [
-      "fotos/gato.jpg"
-    ],
-    "emoji": "🐱",
-    "categoria": "Animais",
-    "data": "2026-08-30",
-    "cor": "#ffb627",
-    "tempo": 3.5,
-    "descricao": "Gato enrolado dormindo. Impressão rápida e fofa.",
-    "tags": [
-      "fofo",
-      "rápido"
-    ]
-  },
-  {
     "nome": "ALEXANDRE LEIRAS - FLAMENGO",
     "fotos": [
       "fotos/alexandre-leiras-flamengo-musljt5g-1.jpg",
