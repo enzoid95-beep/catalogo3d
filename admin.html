@@ -170,6 +170,22 @@ $("#fotos").addEventListener("change",e=>{
   $("#previews").innerHTML = [...e.target.files].map(f=>`<img src="${URL.createObjectURL(f)}" alt="">`).join("");
 });
 
+/* ---------- categorias ---------- */
+const CATEGORIAS_PADRAO = [
+  "Animais","Anime e Mangá","Arquitetura","Arte e Esculturas","Aviões","Brinquedos","Bustos e Retratos",
+  "Carros e Veículos","Chaveiros","Cosplay","Criaturas Marinhas","Decoração","Desenhos Animados",
+  "Dinossauros","Dragões","Esportes","Família","Fantasia","Ferramentas e Suportes","Filmes e Séries",
+  "Futebol","Games","Guerreiros e Medieval","Halloween","Heróis e Vilões","Insetos","Instrumentos Musicais",
+  "Miniaturas de RPG","Monstros","Música","Natal","Naves Espaciais","Pets","Piratas","Plantas e Vasos",
+  "Presentes","Páscoa","Robôs","Sci-fi","Terror","Utilidades"
+];
+function montarCategorias(extras = []){
+  const todas = [...new Set([...CATEGORIAS_PADRAO, ...extras.filter(Boolean)])]
+    .sort((a,b)=>a.localeCompare(b,"pt-BR"));
+  $("#cats").innerHTML = todas.map(c=>`<option value="${esc(c)}">`).join("");
+}
+montarCategorias();
+
 /* ---------- lista ---------- */
 async function carregarLista(){
   const box = $("#list");
@@ -177,7 +193,7 @@ async function carregarLista(){
   box.innerHTML = `<p class="hint">Carregando...</p>`;
   try{
     const { arr } = await lerBonecos();
-    $("#cats").innerHTML = [...new Set(arr.map(b=>b.categoria))].map(c=>`<option value="${esc(c)}">`).join("");
+    montarCategorias(arr.map(b=>b.categoria));
     if(!arr.length){ box.innerHTML = `<p class="hint">Nenhum boneco ainda.</p>`; return; }
     box.innerHTML = arr.map((b,i)=>{
       const cap = (b.fotos&&b.fotos[0]) || b.foto;
