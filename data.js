@@ -5,24 +5,6 @@
 // ============================================================
 const BONECOS = [
   {
-    "nome": "Dragão Articulado",
-    "fotos": [
-      "fotos/dragao-1.jpg",
-      "fotos/dragao-2.jpg",
-      "fotos/dragao-3.jpg"
-    ],
-    "emoji": "🐉",
-    "categoria": "Fantasia",
-    "data": "2026-09-20",
-    "cor": "#35e0c2",
-    "tempo": 14.5,
-    "descricao": "Dragão articulado impresso em peça única, sem suportes.",
-    "tags": [
-      "articulado",
-      "presente"
-    ]
-  },
-  {
     "nome": "Robô Retrô",
     "fotos": [
       "fotos/robo-1.jpg",
