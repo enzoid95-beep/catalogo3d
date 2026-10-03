@@ -110,11 +110,10 @@ function setLog(el,msg,cls=""){ el.textContent=msg; el.className="log "+cls; }
 
 /* ---------- GitHub API ---------- */
 async function gh(path, opts={}){
-  const r = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/${path}`, {
-    ...opts,
-    cache:"no-store",
-    headers:{ Accept:"application/vnd.github+json", Authorization:"Bearer "+cfg.token, "Content-Type":"application/json" }
-  });
+  const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}` + (path ? "/"+path : "");
+  const headers = { Accept:"application/vnd.github+json", Authorization:"Bearer "+cfg.token };
+  if(opts.body) headers["Content-Type"] = "application/json";
+  const r = await fetch(url, { ...opts, cache:"no-store", headers });
   if(!r.ok){
     let m=""; try{ m=(await r.json()).message; }catch(e){}
     const err = new Error(`GitHub ${r.status}: ${m||r.statusText}`); err.status=r.status; throw err;
