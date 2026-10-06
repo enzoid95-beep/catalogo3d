@@ -1,7 +1,7 @@
 :root{
   --bg:#0e1710;
   --bg2:#17122e;
-  --card:#1d1740;
+  --card:#161918;
   --text:#ffffff;
   --muted:#f0ecff;
   --c1:#ff4d8d;
@@ -28,7 +28,6 @@ body{
   color:var(--c3);background:rgba(53,224,194,.12);padding:6px 14px;border-radius:999px;margin-bottom:18px;
 }
 h1{font-size:clamp(2rem,6vw,3.6rem);font-weight:800;line-height:1.1}
-h1 span{background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{color:var(--muted);margin-top:14px;font-size:1.05rem}
 .stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
 .stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px 20px;min-width:120px}
@@ -136,24 +135,22 @@ footer{text-align:center;color:var(--muted);padding:30px 0 40px;font-size:.85rem
   --lines-sm:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0 1px,transparent 1px 3px);
 }
 
-/* Título principal: duas linhas, extrusão 3D */
+/* Título e subtítulo: off-white sólido com relevo discreto */
 h1{
   display:flex;flex-direction:column;align-items:center;gap:.28em;
   font-size:clamp(2.4rem,8vw,4.6rem);line-height:1.02;letter-spacing:-.01em;
-  filter:drop-shadow(0 -1px 0 rgba(255,255,255,.35))
-         drop-shadow(1px 1px 0 #4a2a8a) drop-shadow(2px 2px 0 #3d2273)
-         drop-shadow(3px 3px 0 #301a5c) drop-shadow(4px 4px 0 #241347)
-         drop-shadow(0 14px 16px rgba(0,0,0,.55));
+  filter:none;
 }
 h1 span{
-  display:block;
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  display:block;background:none;
+  -webkit-background-clip:border-box;background-clip:border-box;
+  -webkit-text-fill-color:#f3f0e8;color:#f3f0e8;
+  text-shadow:0 -1px 0 rgba(255,255,255,.22),
+              0 1px 0 #b4b2ac,
+              0 2px 0 rgba(0,0,0,.55),
+              0 5px 10px rgba(0,0,0,.35);
 }
-h1 .l1{background:var(--lines),linear-gradient(180deg,#ffffff 0%,#ece8ff 100%)}
-h1 .l2{
-  font-size:.62em;letter-spacing:.05em;
-  background:var(--lines),linear-gradient(90deg,var(--c1),var(--c2));
-}
+h1 .l2{font-size:.62em;letter-spacing:.05em}
 
 /* Texto claro (títulos menores e números) */
 .body h3,.lb-info h2,.stat b,.lb-info dd,.panel h2{
@@ -198,13 +195,6 @@ h1 .l2{
 /* Campos de texto: relevo leve (não aceitam textura) */
 input,textarea,select{text-shadow:0 1px 0 rgba(0,0,0,.65)}
 
-/* Garante o recorte do fundo no formato das letras (o atalho "background"
-   acima redefine o recorte, por isso ele é reafirmado aqui no final) */
-h1 .l1,h1 .l2{
-  -webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;color:transparent;
-}
-
 /* Etiquetas, filtros e selos: texto branco sólido (o fundo opaco fica no ::before).
    Assim o texto nunca some atrás do fundo. */
 .eyebrow,.pill,.badge,.count,.counter,.chip,.chip.active{
@@ -215,21 +205,27 @@ h1 .l1,h1 .l2{
 }
 
 /* =========================================================
-   CARDS EM RELEVO — totalmente opacos, com alto contraste
+   CARDS DARK — textura discreta e relevo suave
    ========================================================= */
 .card,.stat,.lb-card,.panel{
-  background:linear-gradient(180deg,#2d2470 0%,#1d1740 55%,#171236 100%);
-  border:1px solid rgba(255,255,255,.30);
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.30),
-             inset 0 -4px 0 rgba(0,0,0,.40),
-             0 4px 0 #07041a,
-             0 16px 30px -8px rgba(0,0,0,.85);
+  background-color:var(--card);
+  background-image:
+    radial-gradient(circle,rgba(255,255,255,.035) .6px,transparent .8px),
+    radial-gradient(circle,rgba(0,0,0,.18) .6px,transparent .8px),
+    linear-gradient(155deg,#222724 0%,#171b19 55%,#111413 100%);
+  background-size:3px 3px,5px 5px,100% 100%;
+  background-position:0 0,1px 2px,0 0;
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),
+             inset 0 -2px 0 rgba(0,0,0,.35),
+             0 3px 0 #080a09,
+             0 14px 28px -10px rgba(0,0,0,.75);
 }
 .card:hover{
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.38),
-             inset 0 -4px 0 rgba(0,0,0,.40),
-             0 4px 0 #07041a,
-             0 22px 40px -10px var(--accent,#7c5cff);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),
+             inset 0 -2px 0 rgba(0,0,0,.35),
+             0 3px 0 #080a09,
+             0 20px 36px -10px rgba(0,0,0,.8);
 }
 .thumb{border-bottom:2px solid rgba(0,0,0,.5);box-shadow:inset 0 -3px 6px rgba(0,0,0,.35)}
 .lb-info{background:transparent}
@@ -286,9 +282,7 @@ h1 .l1,h1 .l2{
 @media(max-width:720px){.lb-nav{margin-top:8px}.novo{top:8px;right:8px;font-size:.62rem;padding:4px 9px}.thumb:has(.count) .novo{top:38px}}
 @media (prefers-reduced-motion:reduce){.card{animation:none}.card,.thumb img{transition:none}}
 
-/* v9: fundo verde musgo; título e subtítulo sem a extrusão 3D (só relevo suave) */
+/* Fundo verde musgo e sobreposição da galeria */
 html{background:#0e1710}
 .lightbox{background:rgba(6,12,8,.86)}
-h1{
-  filter:drop-shadow(0 -1px 0 rgba(255,255,255,.28)) drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 8px 10px rgba(0,0,0,.4));
-}
+
