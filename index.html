@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Impressões 3D - Dr. Leiras</title>
-  <meta name="description" content="Coleção de bonecos e peças impressos em 3D por Dr. Leiras.">
+  <meta name="description" content="Coleção de peças impressos em 3D por Dr. Leiras.">
   <meta name="theme-color" content="#0e1710">
   <meta property="og:title" content="Impressões 3D - Dr. Leiras">
-  <meta property="og:description" content="Coleção de bonecos e peças impressos em 3D.">
+  <meta property="og:description" content="Coleção de peças impressos em 3D.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧸%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
   <header class="hero">
@@ -24,7 +24,7 @@
 
   <main>
     <section class="toolbar">
-      <input id="search" type="search" placeholder="Buscar boneco, categoria, tag..." aria-label="Buscar">
+      <input id="search" type="search" placeholder="Buscar na coleção..." aria-label="Buscar por nome, categoria ou material">
       <div class="chips" id="chips"></div>
       <select id="sort" aria-label="Ordenar">
         <option value="recent">Mais recentes</option>
@@ -36,12 +36,12 @@
     <p class="resultado" id="resultado" aria-live="polite"></p>
     <section class="grid" id="grid"></section>
     <div class="empty" id="empty" hidden>
-      <p>Nenhum boneco encontrado 😢</p>
-      <button class="limpar" id="limpar" type="button">Limpar busca</button>
+      <p>Nenhuma peça encontrada.</p>
+      <button class="limpar" id="limpar" type="button">Limpar filtros</button>
     </div>
   </main>
 
-  <div class="lightbox" id="lightbox" hidden>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="pieceTitle" hidden>
     <div class="lb-card">
       <button class="lb-close" id="lbClose" aria-label="Fechar">×</button>
       <div class="lb-img" id="lbImg"></div>
@@ -49,9 +49,9 @@
     </div>
   </div>
 
-  <footer>Feito com ♥ e filamento · <span id="year"></span></footer>
+  <footer>Feito com ♥ e filamento · <span id="year"></span><a href="admin.html">Gerenciar coleção</a></footer>
 
   <script src="data.js"></script>
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=11"></script>
 </body>
 </html>

@@ -1,234 +1,221 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
-  <title>Admin · Impressões 3D - Dr. Leiras</title>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex"><meta name="theme-color" content="#0e1710">
+  <title>Minha coleção · Impressões 3D - Dr. Leiras</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .wrap{max-width:760px;margin:0 auto;padding:40px 20px 80px}
-    .wrap h1{font-size:2rem;margin-bottom:6px}
-    .panel{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:22px;margin-top:22px}
-    .panel h2{font-size:1.1rem;margin-bottom:14px}
-    label{display:block;font-size:.8rem;color:var(--muted);margin:12px 0 5px;font-weight:500}
-    input,textarea,select{
-      width:100%;background:var(--bg2);color:var(--text);border:1px solid rgba(255,255,255,.1);
-      border-radius:12px;padding:11px 14px;font:inherit;font-size:.92rem;outline:none;
-    }
-    input:focus,textarea:focus{border-color:var(--c4);box-shadow:0 0 0 3px rgba(124,92,255,.25)}
-    input[type=color]{padding:3px;height:44px;cursor:pointer}
-    textarea{min-height:90px;resize:vertical}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-    .btn{
-      border:none;border-radius:14px;padding:13px 22px;font:inherit;font-weight:600;font-size:.95rem;cursor:pointer;
-      background:linear-gradient(90deg,var(--c1),var(--c4));color:#fff;margin-top:18px;transition:.2s;
-    }
-    .btn:hover{filter:brightness(1.1)}
-    .btn:disabled{opacity:.5;cursor:wait}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.18)}
-    .btn.danger{background:#c0264a;padding:7px 14px;font-size:.8rem;margin:0}
-    .previews{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .previews img{width:84px;height:84px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
-    .log{margin-top:16px;font-size:.88rem;line-height:1.6;white-space:pre-wrap;color:var(--muted)}
-    .log.ok{color:var(--c3)} .log.err{color:#ff7a95}
-    .item{display:flex;align-items:center;gap:14px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07)}
-    .item:first-child{border-top:none}
-    .item img,.item .mini{width:52px;height:52px;border-radius:10px;object-fit:cover;flex:none;background:var(--bg2);display:grid;place-items:center;font-size:1.5rem}
-    .item b{flex:1;font-weight:600}
-    .item small{color:var(--muted);display:block;font-weight:400}
-    details summary{cursor:pointer;font-weight:600}
-    .hint{font-size:.78rem;color:var(--muted);margin-top:8px;line-height:1.5}
-    .previews{gap:12px}
-    .pv{position:relative;width:96px;height:96px;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,.14);background:var(--bg2)}
-    .pv.capa{border-color:var(--c2)}
-    .pv img{width:100%;height:100%;object-fit:cover;border:none;border-radius:0;display:block}
-    .pv .rm{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:none;background:rgba(15,11,30,.85);color:#fff;font-size:1.05rem;line-height:1;cursor:pointer;padding:0}
-    .pv .rm:hover{background:#c0264a}
-    .pv .mk,.pv .tg{position:absolute;left:4px;bottom:4px;border:none;border-radius:999px;font:inherit;font-size:.68rem;font-weight:700;padding:3px 9px;cursor:pointer}
-    .pv .mk{background:rgba(15,11,30,.85);color:#fff}.pv .mk:hover{background:var(--c4)}
-    .pv .tg{background:var(--c2);color:#1a0f00;cursor:default}
-    .edit-banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:-4px 0 14px;padding:12px 14px;border-radius:14px;background:rgba(255,182,39,.14);border:1px solid rgba(255,182,39,.5);font-size:.9rem}
-    .edit-banner[hidden]{display:none}
-    .edit-banner b{flex:1;min-width:160px}
-    .edit-banner .btn{margin:0;padding:7px 14px;font-size:.8rem}
-    .item .acoes{display:flex;gap:8px;flex:none}
-    .btn.edit{background:var(--c4);padding:7px 14px;font-size:.8rem;margin:0}
-    .busca-lista{margin-bottom:10px}
-    .total{font-size:.8rem;color:var(--muted);margin:-8px 0 8px}
-    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;background:#0b4b49;border:1px solid rgba(53,224,194,.6);color:#fff;padding:12px 20px;border-radius:14px;font-size:.9rem;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-    .toast[hidden]{display:none}
-    @media(max-width:560px){.row,.row3{grid-template-columns:1fr}.item{flex-wrap:wrap}.item b{flex:1 1 140px}}
-  </style>
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
 <div class="wrap">
-  <h1>Admin do <span style="background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent">Catálogo</span></h1>
-  <p class="sub" style="font-size:.95rem">Envie fotos e dados de um novo boneco direto para o GitHub.</p>
-
+  <header class="admin-header"><div><h1>Gerenciar coleção</h1><p class="sub">Guarde as fotos e a história de cada impressão.</p></div><a class="btn ghost" href="index.html">Ver catálogo ↗</a></header>
+  <p class="connection-status" id="connectionStatus" role="status">Conferindo conexão…</p>
   <details class="panel" id="cfgPanel">
-    <summary>🔑 Conexão com o GitHub</summary>
-    <div class="row3">
-      <div><label>Usuário</label><input id="cOwner" value="enzoid95-beep"></div>
-      <div><label>Repositório</label><input id="cRepo" value="catalogo3d"></div>
-      <div><label>Branch</label><input id="cBranch" value="main"></div>
-    </div>
-    <label>Token de acesso (fine-grained)</label>
-    <input id="cToken" type="password" placeholder="github_pat_..." autocomplete="off">
-    <p class="hint">O token fica salvo só neste navegador. Crie-o em GitHub → Settings → Developer settings → Personal access tokens → Fine-grained, com acesso apenas ao repositório do catálogo e a permissão <b>Contents: Read and write</b>.</p>
-    <button class="btn ghost" id="saveCfg" type="button">Salvar e testar conexão</button>
-    <div class="log" id="cfgLog"></div>
+    <summary>Configuração de acesso</summary>
+    <p class="hint">Configure uma vez neste navegador. Depois, basta voltar aqui para cadastrar suas peças.</p>
+    <fieldset id="cfgFields">
+      <div class="row3"><div><label for="cOwner">Usuário do GitHub</label><input id="cOwner" value="enzoid95-beep" autocomplete="off"></div><div><label for="cRepo">Repositório</label><input id="cRepo" value="catalogo3d" autocomplete="off"></div><div><label for="cBranch">Branch</label><input id="cBranch" value="main" autocomplete="off"></div></div>
+      <label for="cToken">Chave de acesso do GitHub</label><input id="cToken" type="password" placeholder="github_pat_…" autocomplete="off">
+      <p class="hint">No GitHub: Settings → Developer settings → Personal access tokens → Fine-grained. Selecione apenas o repositório do catálogo e a permissão Contents: Read and write. A chave fica neste navegador; em outro aparelho, configure novamente.</p>
+      <div class="actions"><button class="btn" id="saveCfg" type="button">Salvar e testar acesso</button></div>
+    </fieldset>
+    <div class="log" id="cfgLog" role="status" aria-live="polite"></div>
   </details>
-
   <form class="panel" id="form">
-    <h2 id="formTitulo">➕ Novo boneco</h2>
-    <div class="edit-banner" id="editBanner" hidden><b id="editNome"></b><button class="btn ghost" id="cancelEdit" type="button">Cancelar edição</button></div>
-    <label>Nome *</label>
-    <input id="nome" required placeholder="Ex.: Dragão Articulado">
-    <div class="row">
-      <div><label>Categoria *</label><input id="categoria" list="cats" required placeholder="Ex.: Fantasia"><datalist id="cats"></datalist></div>
-      <div><label>Emoji (se não tiver foto)</label><input id="emoji" placeholder="🐉" maxlength="4"></div>
-    </div>
-    <div class="row3">
-      <div><label>Data da impressão</label><input id="data" type="date" required></div>
-      <div><label>Tempo (horas)</label><input id="tempo" type="number" step="0.1" min="0" placeholder="14.5"></div>
-      <div><label>Cor de destaque do card</label><input id="cor" type="color" value="#7c5cff"></div>
-    </div>
-    <label>Descrição</label>
-    <textarea id="descricao" placeholder="Conte um pouco sobre essa impressão..."></textarea>
-    <label>Tags (separadas por vírgula)</label>
-    <input id="tags" placeholder="articulado, presente">
-    <label>Fotos (a primeira vira a capa — use ★ para trocar a capa e × para remover)</label>
-    <input id="fotos" type="file" accept="image/*" multiple>
-    <div class="previews" id="previews"></div>
-    <p class="hint">As fotos são redimensionadas automaticamente (máx. 2000 px, alta qualidade) antes do envio.</p>
-    <button class="btn" id="send" type="submit">Publicar no catálogo</button>
-    <div class="log" id="log"></div>
+    <h2 id="formTitulo">Nova peça</h2>
+    <div class="draft-banner" id="draftBanner" hidden><span id="draftMessage"></span><button class="btn ghost" id="discardDraft" type="button">Descartar rascunho</button></div>
+    <fieldset id="editor">
+      <div class="edit-banner" id="editBanner" hidden><b id="editNome"></b><button class="btn ghost" id="cancelEdit" type="button">Cancelar edição</button></div>
+      <div class="form-top">
+        <label for="nome">Nome da peça *</label><input id="nome" required maxlength="180" placeholder="Ex.: Troféu do Brasileirão">
+        <label for="fotos">Fotos da peça</label><input id="fotos" type="file" accept="image/*" multiple>
+        <p class="hint">Adicione uma ou mais fotos. Escolha a capa abaixo. As imagens são reduzidas automaticamente antes do envio.</p>
+        <div class="previews" id="previews"></div>
+        <div class="cover-tools" id="coverTools" hidden>
+          <h3>Como a capa aparece no catálogo</h3>
+          <div class="cover-layout"><div class="cover-preview"><img id="coverPreview" alt="Prévia da capa"></div><div>
+            <label for="capaModo">Enquadramento</label><select id="capaModo"><option value="contain">Foto inteira — sem cortes</option><option value="cover">Preencher o quadrado</option></select>
+            <div class="cover-sliders" id="coverSliders" hidden><div><label for="capaX">Posição horizontal</label><input id="capaX" type="range" min="0" max="100" value="50"></div><div><label for="capaY">Posição vertical</label><input id="capaY" type="range" min="0" max="100" value="50"></div></div>
+            <p class="hint">O enquadramento afeta só a capa. A galeria sempre mostra a foto inteira.</p>
+          </div></div>
+        </div>
+        <div class="row"><div><label for="categoria">Categoria *</label><input id="categoria" list="cats" required maxlength="100" placeholder="Escolha ou crie uma categoria"><datalist id="cats"></datalist></div><div><label for="data">Data da impressão *</label><input id="data" type="date" required></div></div>
+      </div>
+      <details class="optional" id="moreDetails">
+        <summary>Mais detalhes da impressão <span class="hint">(opcional)</span></summary>
+        <label for="descricao">Sobre a peça</label><textarea id="descricao" maxlength="6000" placeholder="Conte a história dessa impressão, para quem foi feita…"></textarea>
+        <div class="row"><div><label for="tempoH">Tempo: horas</label><input id="tempoH" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="5"></div><div><label for="tempoM">Tempo: minutos</label><input id="tempoM" type="number" min="0" max="59" step="1" inputmode="numeric" placeholder="30"></div></div>
+        <div class="row"><div><label for="material">Material / filamento</label><input id="material" list="materials" maxlength="150" placeholder="Ex.: PLA fosco preto"><datalist id="materials"><option value="PLA"><option value="PLA Matte"><option value="PETG"><option value="TPU"><option value="ABS"><option value="Resina"></datalist></div><div><label for="filamento">Filamento usado (gramas)</label><input id="filamento" type="number" min="0" step="0.1" inputmode="decimal" placeholder="Ex.: 85"></div></div>
+        <label for="tamanho">Tamanho da peça</label><input id="tamanho" maxlength="150" placeholder="Ex.: 15 cm de altura ou 10 × 8 × 15 cm">
+        <label for="modelo">Link do modelo original</label><input id="modelo" type="url" placeholder="https://…" maxlength="2000"><p class="hint">Pode ser um link do MakerWorld, Printables ou outro site.</p>
+        <label for="observacoes">Observações da impressão</label><textarea id="observacoes" maxlength="6000" placeholder="Ex.: camada de 0,2 mm, suporte na base, o que funcionou e o que mudaria…"></textarea>
+        <label for="tags">Palavras-chave</label><input id="tags" maxlength="500" placeholder="Ex.: articulado, presente, futebol"><p class="hint">Separe as palavras por vírgula. Os detalhes preenchidos aparecem na página da peça.</p>
+        <label for="emoji">Símbolo para peças sem foto</label><input id="emoji" maxlength="16" placeholder="🧸">
+      </details>
+      <div class="actions"><button class="btn" id="send" type="submit">Publicar no catálogo</button></div>
+    </fieldset>
+    <p class="draft-status" id="draftStatus" role="status" aria-live="polite"></p>
+    <div class="progress-box" id="publishProgress" hidden><p id="progressText" role="status" aria-live="polite"></p><progress id="progressBar" max="100" value="0" aria-label="Progresso da publicação"></progress></div>
+    <div class="log" id="log" role="status" aria-live="polite"></div>
   </form>
-
-  <section class="panel">
-    <h2>📦 Bonecos publicados</h2>
-    <input class="busca-lista" id="buscaLista" type="search" placeholder="Buscar na lista..." aria-label="Buscar na lista" hidden>
-    <p class="total" id="total"></p>
-    <div id="list"><p class="hint">Conecte ao GitHub para ver a lista.</p></div>
-  </section>
-</div>
-<div class="toast" id="toast" hidden></div>
-
+  <section class="panel"><h2>Peças da coleção</h2><input id="buscaLista" type="search" placeholder="Buscar uma peça para editar…" aria-label="Buscar nas peças cadastradas" hidden><p class="total" id="total"></p><div id="list"><p class="hint">As peças aparecerão aqui depois de conectar.</p></div></section>
+</div><div class="toast" id="toast" role="status" hidden></div>
 <script>
-const $ = s => document.querySelector(s);
-const LS = "catalogo-admin-cfg";
-let cfg = { owner:"enzoid95-beep", repo:"catalogo3d", branch:"main", token:"" };
-try { Object.assign(cfg, JSON.parse(localStorage.getItem(LS)||"{}")); } catch(e){}
-
-$("#cOwner").value = cfg.owner; $("#cRepo").value = cfg.repo; $("#cBranch").value = cfg.branch; $("#cToken").value = cfg.token;
-$("#data").value = new Date().toISOString().slice(0,10);
-if(!cfg.token) $("#cfgPanel").open = true;
-
-const esc = t => { const d=document.createElement("div"); d.textContent=t??""; return d.innerHTML; };
-function setLog(el,msg,cls=""){ el.textContent=msg; el.className="log "+cls; }
-
-/* ---------- GitHub API ---------- */
-async function gh(path, opts={}){
-  const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}` + (path ? "/"+path : "");
-  const headers = { Accept:"application/vnd.github+json", Authorization:"Bearer "+cfg.token };
-  if(opts.body) headers["Content-Type"] = "application/json";
-  const r = await fetch(url, { ...opts, cache:"no-store", headers });
+const $=s=>document.querySelector(s);
+const LS='catalogo-admin-cfg';
+const FIELD_IDS=['nome','categoria','data','descricao','tempoH','tempoM','material','filamento','tamanho','modelo','observacoes','tags','emoji','capaModo','capaX','capaY'];
+let cfg={owner:'enzoid95-beep',repo:'catalogo3d',branch:'main',token:''};
+try{const saved=JSON.parse(localStorage.getItem(LS)||'{}');for(const k of Object.keys(cfg))if(typeof saved[k]==='string')cfg[k]=saved[k];}catch{}
+let fotosForm=[],editando=null,bonecosCache=[],busy=false,loadingList=false;
+let draftTimer,draftSerial=0,savedSerial=0,draftQueue=Promise.resolve(),dbPromise=null,draftAvailable=true;
+let novoId=criarId();
+function criarId(){return globalThis.crypto?.randomUUID?.()||'peca-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);}
+function esc(t){return String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function normalizar(t){return String(t??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
+function slug(s){return normalizar(s).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'peca';}
+function hoje(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function setLog(el,msg,cls=''){el.textContent=msg;el.className='log '+cls;}
+function setConnection(msg,ok=false){$('#connectionStatus').textContent=msg;$('#connectionStatus').className='connection-status'+(ok?' ok':'');}
+function aviso(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(aviso.timer);aviso.timer=setTimeout(()=>t.hidden=true,3500);}
+function urlModelo(value){if(!value.trim())return '';let u;try{u=new URL(value.trim());}catch{throw new Error('Confira o link do modelo. Ele deve começar com https:// ou http://.');}if(!['https:','http:'].includes(u.protocol))throw new Error('Use um link do modelo com https:// ou http://.');return u.href;}
+function fotosDe(b){return Array.isArray(b.fotos)&&b.fotos.length?b.fotos:(b.foto?[b.foto]:[]);}
+function mesmaPeca(b,ref){return ref.id?b.id===ref.id:b.nome===ref.nome&&b.data===ref.data;}
+function fingerprint(b){return JSON.stringify(b);}
+function tempoDoForm(){const h=Number($('#tempoH').value)||0,m=Number($('#tempoM').value)||0;if(!Number.isInteger(h)||h<0||h>100000||!Number.isInteger(m)||m<0||m>59)throw new Error('Preencha o tempo com horas inteiras e minutos entre 0 e 59.');return $('#tempoH').value!==''||$('#tempoM').value!==''?(h*60+m)/60:undefined;}
+function capaDoForm(){return {ajuste:$('#capaModo').value==='cover'?'cover':'contain',x:Number($('#capaX').value),y:Number($('#capaY').value)};}
+function lock(value){busy=value;$('#editor').disabled=value;$('#cfgFields').disabled=value;$('#discardDraft').disabled=value;$('#list').querySelectorAll('button').forEach(b=>b.disabled=value);}
+function progresso(msg,value){$('#publishProgress').hidden=false;$('#progressText').textContent=msg;$('#progressBar').value=value;}
+/* Acesso já configurado fica recolhido, sem pedir a chave a cada cadastro. */
+for(const [id,key] of [['cOwner','owner'],['cRepo','repo'],['cBranch','branch'],['cToken','token']])$('#'+id).value=cfg[key];
+$('#data').value=hoje();$('#cfgPanel').open=!cfg.token;
+async function gh(path,opts={}){
+  const base=`https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}`;
+  const headers={Accept:'application/vnd.github+json',Authorization:'Bearer '+cfg.token,'X-GitHub-Api-Version':'2022-11-28'};
+  if(opts.body)headers['Content-Type']='application/json';
+  let r;try{r=await fetch(base+(path?'/'+path:''),{...opts,cache:'no-store',headers});}catch{throw new Error('Não foi possível conectar. Confira a internet e tente novamente.');}
   if(!r.ok){
-    let m=""; try{ m=(await r.json()).message; }catch(e){}
-    const err = new Error(`GitHub ${r.status}: ${m||r.statusText}`); err.status=r.status; throw err;
+    const msgs={401:'A chave de acesso não foi aceita. Confira a configuração de acesso.',403:'O acesso foi recusado. Confira a validade da chave e a permissão Contents: Read and write.',404:'Não encontrei o repositório ou arquivo. Confira usuário, repositório, branch e acesso.',409:'O catálogo foi alterado durante o envio. Recarregue a lista e tente novamente; seu rascunho foi mantido.',422:'O GitHub não aceitou os dados. Confira a configuração e tente novamente.'};
+    const err=new Error(msgs[r.status]||`Não foi possível concluir o envio (erro ${r.status}). Tente novamente.`);err.status=r.status;throw err;
   }
-  return r.status===204 ? null : r.json();
+  return r.status===204?null:r.json();
 }
-async function getFile(path){
-  try { return await gh(`contents/${path}?ref=${encodeURIComponent(cfg.branch)}`); }
-  catch(e){ if(e.status===404) return null; throw e; }
-}
-function putFile(path, b64, message, sha){
-  return gh(`contents/${path}`, { method:"PUT", body: JSON.stringify({ message, content:b64, branch:cfg.branch, ...(sha?{sha}:{}) }) });
-}
-const utf8ToB64 = s => btoa(unescape(encodeURIComponent(s)));
-const b64ToUtf8 = b => decodeURIComponent(escape(atob(b.replace(/\n/g,""))));
-
-/* ---------- data.js ---------- */
-const HEADER =
-`// ============================================================
-//  Lista de bonecos do catálogo.
-//  Este arquivo é atualizado pela página admin.html — você
-//  também pode editá-lo à mão, se preferir.
-// ============================================================
-`;
+async function getFile(path){try{return await gh(`contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(cfg.branch)}`);}catch(e){if(e.status===404)return null;throw e;}}
+function putFile(path,content,message,sha){return gh('contents/'+path.split('/').map(encodeURIComponent).join('/'),{method:'PUT',body:JSON.stringify({message,content,branch:cfg.branch,...(sha?{sha}:{})})});}
+function utf8ToB64(s){const bytes=new TextEncoder().encode(s);let binary='';for(const b of bytes)binary+=String.fromCharCode(b);return btoa(binary);}
+function b64ToUtf8(b){return new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\s/g,'')),c=>c.charCodeAt(0)));}
 async function lerBonecos(){
-  const f = await getFile("data.js");
-  if(!f) return { arr:[], sha:null };
-  const txt = b64ToUtf8(f.content);
-  const m = txt.match(/const BONECOS\s*=\s*([\s\S]*\])\s*;?\s*$/);
-  if(!m) throw new Error("Não consegui ler o data.js (formato inesperado).");
-  return { arr: new Function("return "+m[1])(), sha:f.sha };
+  const f=await getFile('data.js');if(!f)return {arr:[],sha:null};
+  if(!f.content)throw new Error('O catálogo não pôde ser lido. Tente novamente.');
+  const txt=b64ToUtf8(f.content),m=txt.match(/const BONECOS\s*=\s*(\[[\s\S]*\])\s*;?\s*$/);
+  if(!m)throw new Error('O arquivo do catálogo está em um formato inesperado.');
+  let arr;try{arr=JSON.parse(m[1]);}catch{throw new Error('Não consegui ler os dados do catálogo. O arquivo deve conter uma lista JSON válida.');}
+  if(!Array.isArray(arr))throw new Error('O catálogo deve conter uma lista de peças.');return {arr,sha:f.sha};
 }
-const gerarDataJs = arr => HEADER + "const BONECOS = " + JSON.stringify(arr,null,2) + ";\n";
-
-/* ---------- imagens ---------- */
-function redimensionar(file, max=2000){
-  return new Promise((res,rej)=>{
-    const url = URL.createObjectURL(file), img = new Image();
-    img.onload = ()=>{
-      const k = Math.min(1, max/Math.max(img.width,img.height));
-      const c = document.createElement("canvas");
-      c.width = Math.round(img.width*k); c.height = Math.round(img.height*k);
-      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
-      URL.revokeObjectURL(url);
-      res(c.toDataURL("image/jpeg",0.9).split(",")[1]);
-    };
-    img.onerror = ()=>{ URL.revokeObjectURL(url); rej(new Error("Não consegui ler a imagem "+file.name)); };
-    img.src = url;
+const gerarDataJs=arr=>'// Lista de peças. Atualizada pela página admin.html.\nconst BONECOS = '+JSON.stringify(arr,null,2)+';\n';
+function redimensionar(file,max=2000){return new Promise((resolve,reject)=>{
+  const url=URL.createObjectURL(file),img=new Image();
+  img.onload=()=>{try{
+    const k=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.naturalWidth*k));c.height=Math.max(1,Math.round(img.naturalHeight*k));
+    const ctx=c.getContext('2d');if(!ctx)throw new Error('Este navegador não conseguiu preparar as fotos.');
+    ctx.fillStyle='#f3f0e8';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',.9).split(',')[1]);
+  }catch(e){reject(e);}finally{URL.revokeObjectURL(url);}};
+  img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error(`Não consegui abrir a foto “${file.name}”. Tente enviar em JPG, PNG ou WebP.`));};img.src=url;
+});}
+function atualizarCapa(){
+  const f=fotosForm[0];$('#coverTools').hidden=!f;$('#coverSliders').hidden=$('#capaModo').value!=='cover';
+  const im=$('#coverPreview');if(!f){im.removeAttribute('src');return;}
+  const src=f.url||f.old||f.path;if(im.getAttribute('src')!==src)im.src=src;
+  const c=capaDoForm();im.style.objectFit=c.ajuste;im.style.objectPosition=`${c.x}% ${c.y}%`;
+}
+function renderPrev(){
+  $('#previews').innerHTML=fotosForm.map((f,i)=>`<div class="pv ${i===0?'capa':''}"><img src="${esc(f.url||f.old||f.path)}" alt="Foto ${i+1}"><div class="pv-actions">${i!==0?`<button type="button" data-cap="${i}" aria-label="Usar foto ${i+1} como capa">Usar capa</button>`:''}<button type="button" class="rm" data-rm="${i}" aria-label="Remover foto ${i+1}">Remover</button></div>${i===0?'<span class="tg">Capa da peça</span>':''}</div>`).join('');
+  atualizarCapa();
+}
+$('#fotos').addEventListener('change',e=>{
+  if(busy)return;
+  const rejeitadas=[];
+  for(const file of e.target.files){if(!file.type.startsWith('image/')){rejeitadas.push(file.name);continue;}fotosForm.push({file,url:URL.createObjectURL(file)});}
+  e.target.value='';renderPrev();agendarRascunho();
+  if(rejeitadas.length)setLog($('#log'),'Escolha apenas arquivos de imagem. Alguns arquivos não foram adicionados.','err');
+});
+$('#previews').addEventListener('click',e=>{
+  if(busy)return;const r=e.target.closest('[data-rm]'),m=e.target.closest('[data-cap]');
+  if(r){const [f]=fotosForm.splice(Number(r.dataset.rm),1);if(f?.url)URL.revokeObjectURL(f.url);}
+  if(m){const [f]=fotosForm.splice(Number(m.dataset.cap),1);if(f)fotosForm.unshift(f);$('#capaX').value=50;$('#capaY').value=50;}
+  if(r||m){renderPrev();agendarRascunho();}
+});
+for(const id of ['capaModo','capaX','capaY'])$('#'+id).addEventListener('input',atualizarCapa);
+/* Rascunho local: IndexedDB guarda também as fotos. Texto tem cópia de reserva. */
+function draftKey(){return `catalogo-draft:${cfg.owner}/${cfg.repo}/${cfg.branch}`;}
+function abrirDB(){
+  if(dbPromise)return dbPromise;
+  dbPromise=new Promise((resolve,reject)=>{
+    if(typeof indexedDB==='undefined'){reject(new Error('Armazenamento indisponível'));return;}
+    const req=indexedDB.open('catalogo3d-rascunhos',1);
+    req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('drafts'))req.result.createObjectStore('drafts');};
+    req.onsuccess=()=>{const db=req.result;db.onversionchange=()=>db.close();resolve(db);};req.onerror=()=>reject(req.error);req.onblocked=()=>reject(new Error('Rascunhos bloqueados por outra aba.'));
+  });return dbPromise;
+}
+async function dbAction(action,value,key=draftKey()){
+  const db=await abrirDB();return new Promise((resolve,reject)=>{
+    const tx=db.transaction('drafts',action==='get'?'readonly':'readwrite'),store=tx.objectStore('drafts');let req,result;
+    if(action==='get')req=store.get(key);else if(action==='put')req=store.put(value,key);else req=store.delete(key);
+    req.onsuccess=()=>{result=req.result;};tx.oncomplete=()=>resolve(result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('Não foi possível salvar o rascunho.'));
   });
 }
-const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") || "boneco";
+function snapshot(){return {values:Object.fromEntries(FIELD_IDS.map(id=>[id,$('#'+id).value])),photos:fotosForm.map(f=>({old:f.old,path:f.path,file:f.file})),edit:editando,novoId,updated:Date.now()};}
+function hasWork(s){return Boolean(s?.edit||s?.photos?.length||FIELD_IDS.some(id=>!['data','capaModo','capaX','capaY'].includes(id)&&String(s?.values?.[id]||'').trim()));}
+function textoReserva(state){return {...state,photos:state.photos.map(f=>({old:f.old,path:f.path,missing:!!f.file,name:f.file?.name})),textOnly:true};}
+function agendarRascunho(){if(busy)return;draftSerial++;$('#draftStatus').className='draft-status';$('#draftStatus').textContent='Salvando rascunho…';clearTimeout(draftTimer);draftTimer=setTimeout(salvarRascunho,450);}
+function salvarRascunho(){
+  clearTimeout(draftTimer);const state=snapshot(),serial=draftSerial,key=draftKey();
+  draftQueue=draftQueue.catch(()=>{}).then(async()=>{
+    let textSaved=false;
+    try{if(hasWork(state))localStorage.setItem(key,JSON.stringify(textoReserva(state)));else localStorage.removeItem(key);textSaved=true;}catch{}
+    try{if(hasWork(state))await dbAction('put',state,key);else await dbAction('delete',null,key);
+      draftAvailable=true;savedSerial=Math.max(savedSerial,serial);
+      if(serial===draftSerial){$('#draftStatus').className='draft-status';$('#draftStatus').textContent=hasWork(state)?'Rascunho salvo neste navegador, incluindo as fotos.':'';}
+    }catch{
+      draftAvailable=false;
+      if(textSaved)savedSerial=Math.max(savedSerial,serial);
+      if(serial===draftSerial){$('#draftStatus').className='draft-status err';$('#draftStatus').textContent=textSaved?'Texto salvo. As fotos novas não puderam ser guardadas; se fechar a página, será preciso adicioná-las novamente.':'Não consegui salvar o rascunho neste navegador. Mantenha a página aberta até concluir o cadastro.';}
+    }
+  });return draftQueue;
+}
+async function apagarRascunho(){
+  clearTimeout(draftTimer);await draftQueue;const key=draftKey();
+  // A marca de descarte impede recuperar uma cópia antiga se IndexedDB falhar.
+  let cleared=false;
+  try{localStorage.setItem(key,JSON.stringify({cleared:true,updated:Date.now(),values:{},photos:[]}));cleared=true;}catch{}
+  try{await dbAction('delete',null,key);cleared=true;try{localStorage.removeItem(key);}catch{}}catch{}
+  if(!cleared)throw new Error('O navegador não conseguiu descartar o rascunho.');
+  draftSerial=0;savedSerial=0;$('#draftBanner').hidden=true;$('#draftStatus').textContent='';
+}
+function liberarFotos(){fotosForm.forEach(f=>{if(f.url)URL.revokeObjectURL(f.url);});fotosForm=[];}
+function resetForm(){
+  liberarFotos();$('#form').reset();editando=null;novoId=criarId();$('#data').value=hoje();$('#editBanner').hidden=true;$('#formTitulo').textContent='Nova peça';$('#send').textContent='Publicar no catálogo';$('#moreDetails').open=false;renderPrev();
+}
+async function restaurarRascunho(){
+  let s;try{s=await dbAction('get');}catch{draftAvailable=false;}
+  let backup;try{backup=JSON.parse(localStorage.getItem(draftKey())||'null');}catch{}
+  if(backup&&(!s||backup.updated>s.updated))s=backup;
+  if(!s||s.cleared||!hasWork(s))return;
+  novoId=typeof s.novoId==='string'?s.novoId:criarId();
+  for(const id of FIELD_IDS)if(typeof s.values?.[id]==='string')$('#'+id).value=s.values[id];
+  editando=s.edit||null;let missing=0;
+  fotosForm=(s.photos||[]).flatMap(f=>{if(f.missing){if(f.path)return [{old:f.path}];missing++;return [];}if(f.file instanceof Blob)return [{...f,url:URL.createObjectURL(f.file)}];return f.old||f.path?[{...f}]:[];});
+  if(editando){$('#formTitulo').textContent='Editar peça';$('#send').textContent='Salvar alterações';$('#editBanner').hidden=false;$('#editNome').textContent='Editando: '+editando.nome;}
+  renderPrev();$('#draftBanner').hidden=false;$('#draftMessage').textContent='Rascunho recuperado de '+new Date(s.updated).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'.';
+  $('#draftStatus').textContent=missing?`${missing} foto(s) nova(s) não foram guardadas. Adicione novamente antes de publicar.`:'Você pode continuar de onde parou.';$('#draftStatus').className='draft-status'+(missing?' err':'');
+}
+$('#form').addEventListener('input',e=>{if(e.target.id!=='fotos')agendarRascunho();});
+$('#form').addEventListener('change',e=>{if(e.target.id!=='fotos')agendarRascunho();});
+$('#discardDraft').addEventListener('click',async()=>{if(busy||!confirm('Descartar este rascunho? As peças já publicadas continuarão no catálogo.'))return;lock(true);try{await apagarRascunho();resetForm();setLog($('#log'),'');aviso('Rascunho descartado');}catch(e){setLog($('#log'),e.message,'err');}finally{lock(false);}});
+$('#cancelEdit').addEventListener('click',async()=>{if(busy||!confirm('Cancelar a edição e descartar este rascunho?'))return;lock(true);try{await apagarRascunho();resetForm();setLog($('#log'),'');}catch(e){setLog($('#log'),e.message,'err');}finally{lock(false);}});
+window.addEventListener('beforeunload',e=>{if(busy||draftSerial>savedSerial||(!draftAvailable&&fotosForm.some(f=>f.file))){e.preventDefault();e.returnValue='';}});
 
-/* fotos do formulário: já publicadas ({old}) e novas ({file,url}); a primeira é a capa */
-let fotosForm = [], editando = null, bonecosCache = [];
-function renderPrev(){
-  $("#previews").innerHTML = fotosForm.map((f,i)=>`<div class="pv ${i===0?"capa":""}">
-    <img src="${esc(f.url||f.old+"?v="+Date.now())}" alt="">
-    <button type="button" class="rm" data-rm="${i}" aria-label="Remover foto">×</button>
-    ${i===0?`<span class="tg">capa</span>`:`<button type="button" class="mk" data-cap="${i}">★ capa</button>`}
-  </div>`).join("");
-}
-$("#fotos").addEventListener("change",e=>{
-  for(const file of e.target.files) fotosForm.push({ file, url:URL.createObjectURL(file) });
-  e.target.value = "";
-  renderPrev();
-});
-$("#previews").addEventListener("click",e=>{
-  const r=e.target.closest("[data-rm]"), m=e.target.closest("[data-cap]");
-  if(r){ const [f]=fotosForm.splice(+r.dataset.rm,1); if(f.url) URL.revokeObjectURL(f.url); renderPrev(); }
-  if(m){ const [f]=fotosForm.splice(+m.dataset.cap,1); fotosForm.unshift(f); renderPrev(); }
-});
-function aviso(msg){ const t=$("#toast"); t.textContent=msg; t.hidden=false; clearTimeout(aviso.t); aviso.t=setTimeout(()=>t.hidden=true,3500); }
-function limparForm(){
-  $("#form").reset(); fotosForm.forEach(f=>f.url&&URL.revokeObjectURL(f.url)); fotosForm=[]; renderPrev();
-  editando=null; $("#editBanner").hidden=true; $("#formTitulo").textContent="➕ Novo boneco"; $("#send").textContent="Publicar no catálogo";
-  $("#data").value=new Date().toISOString().slice(0,10); $("#cor").value="#7c5cff";
-}
-function editarBoneco(i){
-  const b = bonecosCache[i]; if(!b) return;
-  limparForm();
-  editando = { nome:b.nome, data:b.data, fotos:[...(b.fotos||(b.foto?[b.foto]:[]))] };
-  $("#nome").value=b.nome||""; $("#categoria").value=b.categoria||""; $("#emoji").value=b.emoji||"";
-  $("#data").value=b.data||""; $("#tempo").value=b.tempo??""; $("#cor").value=b.cor||"#7c5cff";
-  $("#descricao").value=b.descricao||""; $("#tags").value=(b.tags||[]).join(", ");
-  fotosForm = editando.fotos.map(p=>({ old:p })); renderPrev();
-  $("#formTitulo").textContent="✏️ Editar boneco"; $("#editNome").textContent="Editando: "+b.nome;
-  $("#editBanner").hidden=false; $("#send").textContent="Salvar alterações";
-  $("#form").scrollIntoView({ behavior:"smooth", block:"start" });
-}
-$("#cancelEdit").addEventListener("click",limparForm);
-
-/* ---------- categorias ---------- */
 const CATEGORIAS_PADRAO = [
   "Animais","Anime e Mangá","Arquitetura","Arte e Esculturas","Aviões","Brinquedos","Bustos e Retratos",
   "Carros e Veículos","Chaveiros","Cosplay","Criaturas Marinhas","Decoração","Desenhos Animados",
@@ -237,136 +224,129 @@ const CATEGORIAS_PADRAO = [
   "Miniaturas de RPG","Monstros","Música","Natal","Naves Espaciais","Pets","Piratas","Plantas e Vasos",
   "Presentes","Páscoa","Robôs","Sci-fi","Terror","Utilidades"
 ];
-function montarCategorias(extras = []){
-  const todas = [...new Set([...CATEGORIAS_PADRAO, ...extras.filter(Boolean)])]
-    .sort((a,b)=>a.localeCompare(b,"pt-BR"));
-  $("#cats").innerHTML = todas.map(c=>`<option value="${esc(c)}">`).join("");
-}
-montarCategorias();
 
-/* ---------- lista ---------- */
+function montarCategorias(extras=[]){const todas=[...new Set([...CATEGORIAS_PADRAO,...extras.filter(Boolean)])].sort((a,b)=>a.localeCompare(b,'pt-BR'));$('#cats').innerHTML=todas.map(c=>`<option value="${esc(c)}">`).join('');}
 function desenharLista(){
-  const box=$("#list"), q=($("#buscaLista").value||"").trim().toLowerCase();
-  const itens=bonecosCache.map((b,i)=>({b,i})).filter(({b})=>[b.nome,b.categoria,...(b.tags||[])].join(" ").toLowerCase().includes(q))
-    .sort((x,y)=>(y.b.data||"").localeCompare(x.b.data||""));
-  $("#total").textContent = `${bonecosCache.length} boneco(s) publicado(s)` + (q?` · ${itens.length} encontrado(s)`:"");
-  if(!itens.length){ box.innerHTML=`<p class="hint">${q?"Nada encontrado.":"Nenhum boneco ainda."}</p>`; return; }
-  box.innerHTML = itens.map(({b,i})=>{
-    const cap = (b.fotos&&b.fotos[0]) || b.foto;
-    return `<div class="item">
-      ${cap?`<img src="${esc(cap)}?v=${Date.now()}" alt="" onerror="this.outerHTML='<div class=mini>${esc(b.emoji||"🧸")}</div>'">`:`<div class="mini">${esc(b.emoji||"🧸")}</div>`}
-      <b>${esc(b.nome)}<small>${esc(b.categoria)} · ${(b.fotos||(b.foto?[b.foto]:[])).length} foto(s) · ${esc(b.data||"")}</small></b>
-      <div class="acoes">
-        <button class="btn edit" data-edit="${i}" type="button">Editar</button>
-        <button class="btn danger" data-nome="${esc(b.nome)}" data-data="${esc(b.data)}" type="button">Excluir</button>
-      </div>
-    </div>`; }).join("");
+  const q=normalizar($('#buscaLista').value.trim());
+  const itens=bonecosCache.map((b,i)=>({b,i})).filter(({b})=>normalizar([b.nome,b.categoria,b.material,...(b.tags||[])].join(' ')).includes(q)).sort((x,y)=>String(y.b.data||'').localeCompare(String(x.b.data||'')));
+  $('#total').textContent=`${bonecosCache.length} ${bonecosCache.length===1?'peça cadastrada':'peças cadastradas'}`+(q?` · ${itens.length} encontrada(s)`: '');
+  if(!itens.length){$('#list').innerHTML=`<p class="hint">${q?'Nenhuma peça encontrada.':'Sua primeira peça pode ser cadastrada no formulário acima.'}</p>`;return;}
+  $('#list').innerHTML=itens.map(({b,i})=>{
+    const cap=fotosDe(b)[0];
+    return `<div class="item">${cap?`<img src="${esc(cap)}" alt="${esc(b.nome)}" loading="lazy">`:`<div class="mini">${esc(b.emoji||'🧸')}</div>`}<b>${esc(b.nome)}<small>${esc(b.categoria)} · ${fotosDe(b).length} foto(s) · ${esc(b.data||'')}</small></b><div class="acoes"><button type="button" class="btn ghost" data-edit="${i}">Editar</button><button type="button" class="btn danger" data-delete="${i}">Excluir</button></div></div>`;
+  }).join('');
+  $('#list').querySelectorAll('img').forEach(im=>im.addEventListener('error',()=>{const d=document.createElement('div');d.className='mini';d.textContent='🧸';im.replaceWith(d);},{once:true}));
+  if(busy)$('#list').querySelectorAll('button').forEach(b=>b.disabled=true);
 }
 async function carregarLista(){
-  const box = $("#list");
-  if(!cfg.token){ box.innerHTML = `<p class="hint">Conecte ao GitHub para ver a lista.</p>`; return; }
-  box.innerHTML = `<p class="hint">Carregando...</p>`;
-  try{
-    const { arr } = await lerBonecos();
-    bonecosCache = arr;
-    montarCategorias(arr.map(b=>b.categoria));
-    $("#buscaLista").hidden = !arr.length;
-    desenharLista();
-  }catch(e){ box.innerHTML = `<p class="log err">${esc(e.message)}</p>`; }
+  if(!cfg.token){$('#list').innerHTML='<p class="hint">Configure o acesso acima para ver e cadastrar as peças.</p>';setConnection('Configure o acesso uma vez para começar.');return;}
+  loadingList=true;$('#list').innerHTML='<p class="hint">Carregando peças…</p>';
+  try{const {arr}=await lerBonecos();bonecosCache=arr;montarCategorias(arr.map(b=>b.categoria));$('#buscaLista').hidden=!arr.length;desenharLista();setConnection('Acesso configurado · pronto para cadastrar',true);}
+  catch(e){$('#list').innerHTML=`<p class="log err">${esc(e.message)}</p>`;setConnection('Não foi possível carregar a coleção. Confira o acesso.');$('#cfgPanel').open=true;}
+  finally{loadingList=false;}
 }
-$("#buscaLista").addEventListener("input",desenharLista);
-
-$("#list").addEventListener("click", async e=>{
-  const ed = e.target.closest("[data-edit]"); if(ed) return editarBoneco(+ed.dataset.edit);
-  const btn = e.target.closest(".danger"); if(!btn) return;
-  if(!confirm(`Excluir "${btn.dataset.nome}" e suas fotos do catálogo?`)) return;
-  btn.disabled = true; btn.textContent = "Excluindo...";
+function indiceOriginal(arr,ref){const indices=arr.map((b,i)=>mesmaPeca(b,ref)?i:-1).filter(i=>i>=0);if(indices.length!==1)throw new Error('Não consegui identificar a peça com segurança. Recarregue a lista antes de editar.');const i=indices[0];if(ref.original&&fingerprint(arr[i])!==fingerprint(ref.original))throw new Error('Essa peça foi alterada em outra aba ou aparelho. Seu rascunho foi mantido. Recarregue a lista para conferir a versão atual antes de editar.');return i;}
+async function editarPeca(i){
+  const b=bonecosCache[i];if(!b||busy||loadingList)return;
+  if(hasWork(snapshot())&&!confirm('Trocar para a edição desta peça e descartar o rascunho atual?'))return;
+  lock(true);
   try{
-    const { arr, sha } = await lerBonecos();
-    const idx = arr.findIndex(b=>b.nome===btn.dataset.nome && b.data===btn.dataset.data);
-    if(idx<0) throw new Error("Boneco não encontrado.");
-    const [rem] = arr.splice(idx,1);
-    for(const p of (rem.fotos||(rem.foto?[rem.foto]:[]))){
-      if(!p.startsWith("fotos/")) continue;
-      const f = await getFile(p);
-      if(f) await gh(`contents/${p}`, { method:"DELETE", body: JSON.stringify({ message:`Remove foto de ${rem.nome}`, sha:f.sha, branch:cfg.branch }) });
-    }
-    await putFile("data.js", utf8ToB64(gerarDataJs(arr)), `Remove ${rem.nome}`, sha);
+    await apagarRascunho();resetForm();setLog($('#log'),'');$('#publishProgress').hidden=true;
+    editando={id:b.id,nome:b.nome,data:b.data,original:JSON.parse(JSON.stringify(b)),fotos:[...fotosDe(b)]};
+    for(const id of ['nome','categoria','data','descricao','material','filamento','tamanho','modelo','observacoes','emoji'])$('#'+id).value=b[id]??'';
+    const total=Math.max(0,Math.round((Number(b.tempo)||0)*60));$('#tempoH').value=b.tempo!=null?Math.floor(total/60):'';$('#tempoM').value=b.tempo!=null?total%60:'';
+    $('#tags').value=(b.tags||[]).join(', ');const c=b.capa||{};$('#capaModo').value=c.ajuste==='cover'?'cover':'contain';$('#capaX').value=c.x??50;$('#capaY').value=c.y??50;
+    fotosForm=fotosDe(b).map(old=>({old}));renderPrev();$('#formTitulo').textContent='Editar peça';$('#send').textContent='Salvar alterações';$('#editBanner').hidden=false;$('#editNome').textContent='Editando: '+b.nome;
+  }catch(e){setLog($('#log'),e.message,'err');return;}finally{lock(false);}
+  agendarRascunho();$('#form').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});$('#nome').focus({preventScroll:true});
+}
+async function removerFotosSemUso(paths,arr,nome){
+  const emUso=new Set(arr.flatMap(fotosDe));let falhas=0;
+  for(const path of new Set(paths)){if(!path?.startsWith('fotos/')||emUso.has(path))continue;
+    try{const f=await getFile(path);if(f)await gh('contents/'+path.split('/').map(encodeURIComponent).join('/'),{method:'DELETE',body:JSON.stringify({message:`Remove foto de ${nome}`,sha:f.sha,branch:cfg.branch})});}catch{falhas++;}
+  }return falhas;
+}
+$('#buscaLista').addEventListener('input',desenharLista);
+$('#list').addEventListener('click',async e=>{
+  if(busy||loadingList)return;const ed=e.target.closest('[data-edit]');if(ed)return editarPeca(Number(ed.dataset.edit));
+  const btn=e.target.closest('[data-delete]');if(!btn)return;
+  const b=bonecosCache[Number(btn.dataset.delete)];if(!b)return;
+  if(!confirm(`Excluir “${b.nome}” da coleção? Esta ação não pode ser desfeita pelo catálogo.`))return;
+  lock(true);btn.textContent='Excluindo…';
+  try{
+    const {arr,sha}=await lerBonecos(),i=indiceOriginal(arr,{id:b.id,nome:b.nome,data:b.data,original:b});const [rem]=arr.splice(i,1);
+    await putFile('data.js',utf8ToB64(gerarDataJs(arr)),`Remove ${rem.nome}`,sha);
+    const falhas=await removerFotosSemUso(fotosDe(rem),arr,rem.nome);
+    if(editando&&mesmaPeca(rem,editando)){await apagarRascunho();resetForm();}
+    await carregarLista();setLog($('#log'),'Peça excluída. A atualização do catálogo pode levar alguns minutos.'+(falhas?' Algumas fotos antigas não puderam ser removidas do repositório.':''),'ok');aviso('Peça excluída');
+  }catch(err){setLog($('#log'),err.message,'err');btn.textContent='Excluir';}
+  finally{lock(false);}
+});
+$('#saveCfg').addEventListener('click',async()=>{
+  if(busy)return;
+  const next={owner:$('#cOwner').value.trim(),repo:$('#cRepo').value.trim(),branch:$('#cBranch').value.trim()||'main',token:$('#cToken').value.trim()};
+  if(!/^[A-Za-z0-9_.-]+$/.test(next.owner)||!/^[A-Za-z0-9_.-]+$/.test(next.repo)||!next.token){setLog($('#cfgLog'),'Preencha o usuário, o repositório e a chave de acesso.','err');return;}
+  const prev={...cfg},changed=next.owner!==cfg.owner||next.repo!==cfg.repo||next.branch!==cfg.branch;
+  lock(true);setLog($('#cfgLog'),'Conferindo acesso…');
+  try{
+    await salvarRascunho();cfg=next;
+    const r=await gh('');if(r.permissions?.push===false)throw new Error('A chave permite apenas leitura. Ative a permissão Contents: Read and write.');
+    const branch=await gh('branches/'+encodeURIComponent(cfg.branch));if(!branch?.name)throw new Error('Não consegui confirmar a branch informada.');
+    let saved=true;try{localStorage.setItem(LS,JSON.stringify(cfg));}catch{saved=false;}
+    setLog($('#cfgLog'),saved?'Acesso configurado neste navegador.':'Acesso válido nesta sessão. O navegador não permitiu guardar a configuração.','ok');$('#cfgPanel').open=false;
+    if(changed){resetForm();$('#draftBanner').hidden=true;$('#draftStatus').textContent='';draftSerial=0;savedSerial=0;await restaurarRascunho();}
     await carregarLista();
-  }catch(err){ alert(err.message); btn.disabled=false; btn.textContent="Excluir"; }
+  }catch(e){cfg=prev;setLog($('#cfgLog'),e.message,'err');setConnection('Confira a configuração de acesso.');}
+  finally{lock(false);}
 });
-
-/* ---------- config ---------- */
-$("#saveCfg").addEventListener("click", async ()=>{
-  cfg = { owner:$("#cOwner").value.trim(), repo:$("#cRepo").value.trim(), branch:$("#cBranch").value.trim()||"main", token:$("#cToken").value.trim() };
-  localStorage.setItem(LS, JSON.stringify(cfg));
-  const log = $("#cfgLog"); setLog(log,"Testando...");
+$('#form').addEventListener('submit',async e=>{
+  e.preventDefault();if(busy)return;
+  const log=$('#log');
+  if(!$('#form').reportValidity())return;
+  if(!cfg.token){setLog(log,'Configure o acesso acima antes de publicar. Seu rascunho continua neste navegador.','err');$('#cfgPanel').open=true;$('#cfgPanel').scrollIntoView({block:'start',behavior:'smooth'});return;}
+  let campos;
   try{
-    const r = await gh("");
-    if(r.permissions && r.permissions.push===false) throw new Error("O token não tem permissão de escrita (Contents: Read and write).");
-    setLog(log,`✓ Conectado a ${r.full_name}`,"ok");
-    $("#cfgPanel").open = false;
-    carregarLista();
-  }catch(e){ setLog(log,"✗ "+e.message,"err"); }
-});
-
-/* ---------- publicar / salvar edição ---------- */
-$("#form").addEventListener("submit", async e=>{
-  e.preventDefault();
-  const log = $("#log"), btn = $("#send");
-  if(!cfg.token){ setLog(log,"Configure o token do GitHub primeiro (🔑 acima).","err"); $("#cfgPanel").open=true; return; }
-  btn.disabled = true;
+    const nome=$('#nome').value.trim(),categoria=$('#categoria').value.trim();if(!nome||!categoria)throw new Error('Preencha o nome e a categoria da peça.');
+    campos={nome,categoria,data:$('#data').value,emoji:$('#emoji').value.trim()||undefined,tempo:tempoDoForm(),descricao:$('#descricao').value.trim(),material:$('#material').value.trim(),filamento:$('#filamento').value!==''?Number($('#filamento').value):undefined,tamanho:$('#tamanho').value.trim(),modelo:urlModelo($('#modelo').value),observacoes:$('#observacoes').value.trim(),tags:[...new Set($('#tags').value.split(',').map(t=>t.trim()).filter(Boolean))],capa:capaDoForm()};
+  }catch(e){setLog(log,e.message,'err');return;}
+  lock(true);setLog(log,'');progresso('Conferindo o cadastro…',5);
+  const wasEditing=!!editando;
+  let committed=false;
   try{
-    const nome = $("#nome").value.trim();
-    const novas = fotosForm.filter(f=>f.file);
-    const base = slug(nome) + "-" + Date.now().toString(36);
-    let n = 0;
+    await salvarRascunho();
+    const initial=await lerBonecos();if(editando)indiceOriginal(initial.arr,editando);
+    const novas=fotosForm.filter(f=>f.file&&!f.path),base=slug(campos.nome)+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
+    let n=0;
     for(const f of novas){
-      n++; setLog(log,`Enviando foto ${n} de ${novas.length}...`);
-      const b64 = await redimensionar(f.file);
-      const path = `fotos/${base}-${n}.jpg`;
-      await putFile(path, b64, `Adiciona foto de ${nome}`);
-      f.path = path;
+      n++;progresso(`Preparando foto ${n} de ${novas.length}…`,10+(n-1)/Math.max(1,novas.length)*60);
+      const b64=await redimensionar(f.file),path=`fotos/${base}-${n}.jpg`;
+      progresso(`Enviando foto ${n} de ${novas.length}…`,15+(n-1)/Math.max(1,novas.length)*60);
+      await putFile(path,b64,`Adiciona foto de ${campos.nome}`);f.path=path;
+      draftSerial++;await salvarRascunho();
     }
-    const finais = fotosForm.map(f=>f.old||f.path);   // ordem do formulário (a primeira é a capa)
-    setLog(log,"Atualizando o catálogo...");
-    const { arr, sha } = await lerBonecos();
-    const campos = {
-      nome,
-      emoji: $("#emoji").value.trim() || undefined,
-      categoria: $("#categoria").value.trim(),
-      data: $("#data").value,
-      cor: $("#cor").value,
-      tempo: $("#tempo").value ? +$("#tempo").value : undefined,
-      descricao: $("#descricao").value.trim(),
-      tags: $("#tags").value.split(",").map(t=>t.trim()).filter(Boolean)
-    };
-    let msg;
-    if(editando){
-      const idx = arr.findIndex(b=>b.nome===editando.nome && b.data===editando.data);
-      if(idx<0) throw new Error("Não encontrei o boneco original para atualizar. Recarregue a lista e tente de novo.");
-      arr[idx] = { ...arr[idx], ...campos, fotos: finais.length?finais:undefined, foto: undefined };
-      msg = `Edita ${nome}`;
-    }else{
-      arr.push({ ...campos, ...(finais.length?{fotos:finais}:{}) });
-      msg = `Adiciona ${nome}`;
+    const finais=fotosForm.map(f=>f.old||f.path).filter(Boolean);
+    progresso('Salvando a peça no catálogo…',80);
+    const {arr,sha}=await lerBonecos();let removidas=[];
+    if(editando){const idx=indiceOriginal(arr,editando);removidas=fotosDe(arr[idx]).filter(p=>!finais.includes(p));arr[idx]={...arr[idx],...campos,fotos:finais.length?finais:undefined,foto:undefined};}
+    else {
+      if(arr.some(b=>b.id===novoId))throw new Error('Esta peça já foi salva no catálogo. Confira a lista antes de publicar novamente.');
+      arr.push({id:novoId,cor:'#d3b77d',...campos,...(finais.length?{fotos:finais}:{})});
     }
-    await putFile("data.js", utf8ToB64(gerarDataJs(arr)), msg, sha);
-    // só depois de salvar o catálogo, apaga do repositório as fotos que foram removidas
-    if(editando){
-      for(const p of editando.fotos.filter(p=>!finais.includes(p) && p.startsWith("fotos/"))){
-        try{ const f = await getFile(p); if(f) await gh(`contents/${p}`, { method:"DELETE", body: JSON.stringify({ message:`Remove foto de ${nome}`, sha:f.sha, branch:cfg.branch }) }); }catch(_){}
-      }
-    }
-    setLog(log, (editando?"✓ Alterações salvas!":"✓ Publicado!")+" O site leva de 1 a 2 minutos para atualizar.","ok");
-    aviso(editando?"Alterações salvas":"Boneco publicado");
-    limparForm();
-    carregarLista();
-  }catch(err){ setLog(log,"✗ "+err.message,"err"); }
-  btn.disabled = false;
+    await putFile('data.js',utf8ToB64(gerarDataJs(arr)),`${wasEditing?'Edita':'Adiciona'} ${campos.nome}`,sha);committed=true;
+    progresso('Cadastro salvo. Finalizando…',95);
+    const falhas=await removerFotosSemUso(removidas,arr,campos.nome);
+    let draftNotice='';try{await apagarRascunho();}catch{draftNotice=' O navegador não conseguiu remover a cópia do rascunho. Se ela voltar, descarte-a; esta peça já está salva.';}
+    resetForm();progresso('Cadastro enviado com sucesso',100);
+    setLog(log,`${wasEditing?'Alterações salvas!':'Peça cadastrada!'} O catálogo pode levar alguns minutos para atualizar. Se ainda não aparecer, aguarde e atualize a página.`+(falhas?' Algumas fotos antigas permaneceram no repositório.':'')+draftNotice,'ok');aviso(wasEditing?'Alterações salvas':'Peça cadastrada');
+    await carregarLista();
+  }catch(err){
+    if(committed){setLog(log,'A peça foi salva, mas não consegui finalizar todas as etapas. Confira a lista antes de tentar publicar novamente.','ok');}
+    else {progresso('Envio interrompido — você pode tentar novamente',0);setLog(log,err.message+' O formulário foi mantido.','err');}
+  }finally{lock(false);}
 });
+montarCategorias();
+(async()=>{lock(true);try{await restaurarRascunho();await carregarLista();}catch(e){setLog($('#log'),e.message,'err');}finally{lock(false);}})();
 
-carregarLista();
 </script>
 </body>
 </html>
