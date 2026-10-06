@@ -3,12 +3,15 @@ const grid = $("#grid"), empty = $("#empty"), chipsEl = $("#chips");
 let categoriaAtiva = "Todos";
 let galFotos = [], galIdx = 0, galBoneco = null, galI = 0;
 let galRatio = 1;
+let listaAtual = [];   // índices (em BONECOS) na ordem exibida, para navegar entre bonecos
 const ratioCache = {};   // proporção (largura/altura) já conhecida de cada foto
 
 const PALETAS = [["#ff4d8d","#7c5cff"],["#ffb627","#ff4d8d"],["#35e0c2","#7c5cff"],["#7c5cff","#35e0c2"]];
 
 function esc(t){ const d=document.createElement("div"); d.textContent=t??""; return d.innerHTML; }
 function fmtData(d){ return new Date(d+"T12:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"numeric"}); }
+function ehNovo(b){ const d=(Date.now()-new Date(b.data+"T12:00:00"))/864e5; return d>=-1 && d<=14; }
+function slugN(b){ return (b.nome||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""); }
 function fmtHoras(h){ const hh=Math.floor(h), mm=Math.round((h-hh)*60); return mm? `${hh}h${String(mm).padStart(2,"0")}` : `${hh}h`; }
 
 // aceita "fotos: [...]" (galeria) ou "foto: '...'" (uma só)
@@ -37,11 +40,15 @@ function render(){
   if(ord==="name") lista.sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"));
   if(ord==="time") lista.sort((a,b)=>(b.tempo||0)-(a.tempo||0));
 
-  grid.innerHTML = lista.map(b=>{
+  listaAtual = lista.map(b=>b._i);
+  const rs = $("#resultado");
+  if(rs) rs.textContent = (q||categoriaAtiva!=="Todos") ? `${lista.length} de ${BONECOS.length} bonecos` : "";
+  grid.innerHTML = lista.map((b,n)=>{
     const fotos = fotosDe(b);
     return `
-    <article class="card" data-i="${b._i}" style="--accent:${esc(b.cor||"#7c5cff")}" tabindex="0" role="button" aria-label="Abrir ${esc(b.nome)}">
+    <article class="card" data-i="${b._i}" style="--accent:${esc(b.cor||"#7c5cff")};--d:${Math.min(n,12)*45}ms" tabindex="0" role="button" aria-label="Abrir ${esc(b.nome)}">
       <div class="thumb">${imagem(b,b._i,fotos[0])}
+        ${ehNovo(b)?`<span class="novo">Novo</span>`:""}
         <span class="badge">${esc(b.categoria)}</span>
         ${fotos.length>1?`<span class="count">📷 ${fotos.length}</span>`:""}
       </div>
@@ -66,9 +73,18 @@ function stats(){
   const horas = BONECOS.reduce((s,b)=>s+(b.tempo||0),0);
   const categorias = new Set(BONECOS.map(b=>b.categoria)).size;
   $("#stats").innerHTML = `
-    <div class="stat"><b>${BONECOS.length}</b><small>bonecos</small></div>
-    <div class="stat"><b>${Math.round(horas)}h</b><small>de impressão</small></div>
-    <div class="stat"><b>${categorias}</b><small>categorias</small></div>`;
+    <div class="stat"><b data-n="${BONECOS.length}">0</b><small>bonecos</small></div>
+    <div class="stat"><b data-n="${Math.round(horas)}" data-s="h">0h</b><small>de impressão</small></div>
+    <div class="stat"><b data-n="${categorias}">0</b><small>categorias</small></div>`;
+  // números sobem até o valor final
+  const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll("#stats b").forEach(el=>{
+    const alvo=+el.dataset.n, suf=el.dataset.s||"";
+    if(reduz||alvo<2){ el.textContent=alvo+suf; return; }
+    const t0=performance.now(), dur=900;
+    const passo=t=>{ const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3); el.textContent=Math.round(alvo*e)+suf; if(k<1) requestAnimationFrame(passo); };
+    requestAnimationFrame(passo);
+  });
 }
 
 /* ---------- Galeria (esquerda) + info (direita) ---------- */
@@ -136,15 +152,31 @@ function abrir(i){
       ${b.tempo?`<dt>Tempo</dt><dd>${fmtHoras(b.tempo)}</dd>`:""}
       <dt>Impresso em</dt><dd>${fmtData(b.data)}</dd>
     </dl>
-    <div class="tags">${(b.tags||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>`;
+    <div class="tags">${(b.tags||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>
+    ${listaAtual.length>1?`<div class="lb-nav">
+      <button type="button" data-b="-1" aria-label="Boneco anterior">‹ Anterior</button>
+      <span>${Math.max(1,listaAtual.indexOf(i)+1)} / ${listaAtual.length}</span>
+      <button type="button" data-b="1" aria-label="Próximo boneco">Próximo ›</button>
+    </div>`:""}`;
   $("#lightbox").hidden = false;
   document.body.style.overflow = "hidden";
+  try{ history.replaceState(null,"","#"+slugN(b)); }catch(e){}
 }
-function fechar(){ $("#lightbox").hidden = true; document.body.style.overflow = ""; }
+function outroBoneco(d){
+  if(listaAtual.length<2) return;
+  const pos = listaAtual.indexOf(galI);
+  abrir(listaAtual[(pos+d+listaAtual.length)%listaAtual.length]);
+}
+function fechar(){
+  $("#lightbox").hidden = true; document.body.style.overflow = "";
+  try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
+}
 
 grid.addEventListener("click",e=>{ const c=e.target.closest(".card"); if(c) abrir(+c.dataset.i); });
 grid.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ const c=e.target.closest(".card"); if(c){ e.preventDefault(); abrir(+c.dataset.i); } }});
 chipsEl.addEventListener("click",e=>{ const b=e.target.closest(".chip"); if(!b) return; categoriaAtiva=b.dataset.c; chips(); render(); });
+$("#lbInfo").addEventListener("click",e=>{ const n=e.target.closest("[data-b]"); if(n) outroBoneco(+n.dataset.b); });
+$("#limpar").addEventListener("click",()=>{ $("#search").value=""; categoriaAtiva="Todos"; chips(); render(); $("#search").focus(); });
 $("#lbImg").addEventListener("click",e=>{
   const n=e.target.closest(".nav"); if(n) return mover(+n.dataset.dir);
   const t=e.target.closest(".th"); if(t){ galIdx=+t.dataset.k; renderGaleria(); }
@@ -158,6 +190,8 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape") fechar();
   if(e.key==="ArrowLeft") mover(-1);
   if(e.key==="ArrowRight") mover(1);
+  if(e.key==="ArrowUp") { e.preventDefault(); outroBoneco(-1); }
+  if(e.key==="ArrowDown") { e.preventDefault(); outroBoneco(1); }
 });
 
 // swipe no celular
@@ -173,3 +207,6 @@ window.addEventListener("resize",()=>{ if(!$("#lightbox").hidden) encaixar(galRa
 
 $("#year").textContent = new Date().getFullYear();
 stats(); chips(); render();
+// link direto para um boneco: site.com/#nome-do-boneco
+(function(){ const h=decodeURIComponent(location.hash.slice(1)); if(!h) return;
+  const i=BONECOS.findIndex(b=>slugN(b)===h); if(i>=0) abrir(i); })();

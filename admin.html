@@ -42,7 +42,26 @@
     .item small{color:var(--muted);display:block;font-weight:400}
     details summary{cursor:pointer;font-weight:600}
     .hint{font-size:.78rem;color:var(--muted);margin-top:8px;line-height:1.5}
-    @media(max-width:560px){.row,.row3{grid-template-columns:1fr}}
+    .previews{gap:12px}
+    .pv{position:relative;width:96px;height:96px;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,.14);background:var(--bg2)}
+    .pv.capa{border-color:var(--c2)}
+    .pv img{width:100%;height:100%;object-fit:cover;border:none;border-radius:0;display:block}
+    .pv .rm{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:none;background:rgba(15,11,30,.85);color:#fff;font-size:1.05rem;line-height:1;cursor:pointer;padding:0}
+    .pv .rm:hover{background:#c0264a}
+    .pv .mk,.pv .tg{position:absolute;left:4px;bottom:4px;border:none;border-radius:999px;font:inherit;font-size:.68rem;font-weight:700;padding:3px 9px;cursor:pointer}
+    .pv .mk{background:rgba(15,11,30,.85);color:#fff}.pv .mk:hover{background:var(--c4)}
+    .pv .tg{background:var(--c2);color:#1a0f00;cursor:default}
+    .edit-banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:-4px 0 14px;padding:12px 14px;border-radius:14px;background:rgba(255,182,39,.14);border:1px solid rgba(255,182,39,.5);font-size:.9rem}
+    .edit-banner[hidden]{display:none}
+    .edit-banner b{flex:1;min-width:160px}
+    .edit-banner .btn{margin:0;padding:7px 14px;font-size:.8rem}
+    .item .acoes{display:flex;gap:8px;flex:none}
+    .btn.edit{background:var(--c4);padding:7px 14px;font-size:.8rem;margin:0}
+    .busca-lista{margin-bottom:10px}
+    .total{font-size:.8rem;color:var(--muted);margin:-8px 0 8px}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;background:#0b4b49;border:1px solid rgba(53,224,194,.6);color:#fff;padding:12px 20px;border-radius:14px;font-size:.9rem;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+    .toast[hidden]{display:none}
+    @media(max-width:560px){.row,.row3{grid-template-columns:1fr}.item{flex-wrap:wrap}.item b{flex:1 1 140px}}
   </style>
 </head>
 <body>
@@ -65,7 +84,8 @@
   </details>
 
   <form class="panel" id="form">
-    <h2>➕ Novo boneco</h2>
+    <h2 id="formTitulo">➕ Novo boneco</h2>
+    <div class="edit-banner" id="editBanner" hidden><b id="editNome"></b><button class="btn ghost" id="cancelEdit" type="button">Cancelar edição</button></div>
     <label>Nome *</label>
     <input id="nome" required placeholder="Ex.: Dragão Articulado">
     <div class="row">
@@ -81,7 +101,7 @@
     <textarea id="descricao" placeholder="Conte um pouco sobre essa impressão..."></textarea>
     <label>Tags (separadas por vírgula)</label>
     <input id="tags" placeholder="articulado, presente">
-    <label>Fotos (a primeira vira a capa)</label>
+    <label>Fotos (a primeira vira a capa — use ★ para trocar a capa e × para remover)</label>
     <input id="fotos" type="file" accept="image/*" multiple>
     <div class="previews" id="previews"></div>
     <p class="hint">As fotos são redimensionadas automaticamente (máx. 2000 px, alta qualidade) antes do envio.</p>
@@ -91,9 +111,12 @@
 
   <section class="panel">
     <h2>📦 Bonecos publicados</h2>
+    <input class="busca-lista" id="buscaLista" type="search" placeholder="Buscar na lista..." aria-label="Buscar na lista" hidden>
+    <p class="total" id="total"></p>
     <div id="list"><p class="hint">Conecte ao GitHub para ver a lista.</p></div>
   </section>
 </div>
+<div class="toast" id="toast" hidden></div>
 
 <script>
 const $ = s => document.querySelector(s);
@@ -166,9 +189,44 @@ function redimensionar(file, max=2000){
 }
 const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") || "boneco";
 
+/* fotos do formulário: já publicadas ({old}) e novas ({file,url}); a primeira é a capa */
+let fotosForm = [], editando = null, bonecosCache = [];
+function renderPrev(){
+  $("#previews").innerHTML = fotosForm.map((f,i)=>`<div class="pv ${i===0?"capa":""}">
+    <img src="${esc(f.url||f.old+"?v="+Date.now())}" alt="">
+    <button type="button" class="rm" data-rm="${i}" aria-label="Remover foto">×</button>
+    ${i===0?`<span class="tg">capa</span>`:`<button type="button" class="mk" data-cap="${i}">★ capa</button>`}
+  </div>`).join("");
+}
 $("#fotos").addEventListener("change",e=>{
-  $("#previews").innerHTML = [...e.target.files].map(f=>`<img src="${URL.createObjectURL(f)}" alt="">`).join("");
+  for(const file of e.target.files) fotosForm.push({ file, url:URL.createObjectURL(file) });
+  e.target.value = "";
+  renderPrev();
 });
+$("#previews").addEventListener("click",e=>{
+  const r=e.target.closest("[data-rm]"), m=e.target.closest("[data-cap]");
+  if(r){ const [f]=fotosForm.splice(+r.dataset.rm,1); if(f.url) URL.revokeObjectURL(f.url); renderPrev(); }
+  if(m){ const [f]=fotosForm.splice(+m.dataset.cap,1); fotosForm.unshift(f); renderPrev(); }
+});
+function aviso(msg){ const t=$("#toast"); t.textContent=msg; t.hidden=false; clearTimeout(aviso.t); aviso.t=setTimeout(()=>t.hidden=true,3500); }
+function limparForm(){
+  $("#form").reset(); fotosForm.forEach(f=>f.url&&URL.revokeObjectURL(f.url)); fotosForm=[]; renderPrev();
+  editando=null; $("#editBanner").hidden=true; $("#formTitulo").textContent="➕ Novo boneco"; $("#send").textContent="Publicar no catálogo";
+  $("#data").value=new Date().toISOString().slice(0,10); $("#cor").value="#7c5cff";
+}
+function editarBoneco(i){
+  const b = bonecosCache[i]; if(!b) return;
+  limparForm();
+  editando = { nome:b.nome, data:b.data, fotos:[...(b.fotos||(b.foto?[b.foto]:[]))] };
+  $("#nome").value=b.nome||""; $("#categoria").value=b.categoria||""; $("#emoji").value=b.emoji||"";
+  $("#data").value=b.data||""; $("#tempo").value=b.tempo??""; $("#cor").value=b.cor||"#7c5cff";
+  $("#descricao").value=b.descricao||""; $("#tags").value=(b.tags||[]).join(", ");
+  fotosForm = editando.fotos.map(p=>({ old:p })); renderPrev();
+  $("#formTitulo").textContent="✏️ Editar boneco"; $("#editNome").textContent="Editando: "+b.nome;
+  $("#editBanner").hidden=false; $("#send").textContent="Salvar alterações";
+  $("#form").scrollIntoView({ behavior:"smooth", block:"start" });
+}
+$("#cancelEdit").addEventListener("click",limparForm);
 
 /* ---------- categorias ---------- */
 const CATEGORIAS_PADRAO = [
@@ -187,25 +245,39 @@ function montarCategorias(extras = []){
 montarCategorias();
 
 /* ---------- lista ---------- */
+function desenharLista(){
+  const box=$("#list"), q=($("#buscaLista").value||"").trim().toLowerCase();
+  const itens=bonecosCache.map((b,i)=>({b,i})).filter(({b})=>[b.nome,b.categoria,...(b.tags||[])].join(" ").toLowerCase().includes(q))
+    .sort((x,y)=>(y.b.data||"").localeCompare(x.b.data||""));
+  $("#total").textContent = `${bonecosCache.length} boneco(s) publicado(s)` + (q?` · ${itens.length} encontrado(s)`:"");
+  if(!itens.length){ box.innerHTML=`<p class="hint">${q?"Nada encontrado.":"Nenhum boneco ainda."}</p>`; return; }
+  box.innerHTML = itens.map(({b,i})=>{
+    const cap = (b.fotos&&b.fotos[0]) || b.foto;
+    return `<div class="item">
+      ${cap?`<img src="${esc(cap)}?v=${Date.now()}" alt="" onerror="this.outerHTML='<div class=mini>${esc(b.emoji||"🧸")}</div>'">`:`<div class="mini">${esc(b.emoji||"🧸")}</div>`}
+      <b>${esc(b.nome)}<small>${esc(b.categoria)} · ${(b.fotos||(b.foto?[b.foto]:[])).length} foto(s) · ${esc(b.data||"")}</small></b>
+      <div class="acoes">
+        <button class="btn edit" data-edit="${i}" type="button">Editar</button>
+        <button class="btn danger" data-nome="${esc(b.nome)}" data-data="${esc(b.data)}" type="button">Excluir</button>
+      </div>
+    </div>`; }).join("");
+}
 async function carregarLista(){
   const box = $("#list");
   if(!cfg.token){ box.innerHTML = `<p class="hint">Conecte ao GitHub para ver a lista.</p>`; return; }
   box.innerHTML = `<p class="hint">Carregando...</p>`;
   try{
     const { arr } = await lerBonecos();
+    bonecosCache = arr;
     montarCategorias(arr.map(b=>b.categoria));
-    if(!arr.length){ box.innerHTML = `<p class="hint">Nenhum boneco ainda.</p>`; return; }
-    box.innerHTML = arr.map((b,i)=>{
-      const cap = (b.fotos&&b.fotos[0]) || b.foto;
-      return `<div class="item">
-        ${cap?`<img src="${esc(cap)}?v=${Date.now()}" alt="" onerror="this.outerHTML='<div class=mini>${esc(b.emoji||"🧸")}</div>'">`:`<div class="mini">${esc(b.emoji||"🧸")}</div>`}
-        <b>${esc(b.nome)}<small>${esc(b.categoria)} · ${(b.fotos||(b.foto?[b.foto]:[])).length} foto(s)</small></b>
-        <button class="btn danger" data-nome="${esc(b.nome)}" data-data="${esc(b.data)}" type="button">Excluir</button>
-      </div>`; }).join("");
+    $("#buscaLista").hidden = !arr.length;
+    desenharLista();
   }catch(e){ box.innerHTML = `<p class="log err">${esc(e.message)}</p>`; }
 }
+$("#buscaLista").addEventListener("input",desenharLista);
 
 $("#list").addEventListener("click", async e=>{
+  const ed = e.target.closest("[data-edit]"); if(ed) return editarBoneco(+ed.dataset.edit);
   const btn = e.target.closest(".danger"); if(!btn) return;
   if(!confirm(`Excluir "${btn.dataset.nome}" e suas fotos do catálogo?`)) return;
   btn.disabled = true; btn.textContent = "Excluindo...";
@@ -238,7 +310,7 @@ $("#saveCfg").addEventListener("click", async ()=>{
   }catch(e){ setLog(log,"✗ "+e.message,"err"); }
 });
 
-/* ---------- publicar ---------- */
+/* ---------- publicar / salvar edição ---------- */
 $("#form").addEventListener("submit", async e=>{
   e.preventDefault();
   const log = $("#log"), btn = $("#send");
@@ -246,20 +318,21 @@ $("#form").addEventListener("submit", async e=>{
   btn.disabled = true;
   try{
     const nome = $("#nome").value.trim();
-    const arquivos = [...$("#fotos").files];
+    const novas = fotosForm.filter(f=>f.file);
     const base = slug(nome) + "-" + Date.now().toString(36);
-    const caminhos = [];
-    for(let i=0;i<arquivos.length;i++){
-      setLog(log,`Enviando foto ${i+1} de ${arquivos.length}...`);
-      const b64 = await redimensionar(arquivos[i]);
-      const path = `fotos/${base}-${i+1}.jpg`;
+    let n = 0;
+    for(const f of novas){
+      n++; setLog(log,`Enviando foto ${n} de ${novas.length}...`);
+      const b64 = await redimensionar(f.file);
+      const path = `fotos/${base}-${n}.jpg`;
       await putFile(path, b64, `Adiciona foto de ${nome}`);
-      caminhos.push(path);
+      f.path = path;
     }
+    const finais = fotosForm.map(f=>f.old||f.path);   // ordem do formulário (a primeira é a capa)
     setLog(log,"Atualizando o catálogo...");
     const { arr, sha } = await lerBonecos();
-    const novo = {
-      nome, ...(caminhos.length?{fotos:caminhos}:{}),
+    const campos = {
+      nome,
       emoji: $("#emoji").value.trim() || undefined,
       categoria: $("#categoria").value.trim(),
       data: $("#data").value,
@@ -268,10 +341,26 @@ $("#form").addEventListener("submit", async e=>{
       descricao: $("#descricao").value.trim(),
       tags: $("#tags").value.split(",").map(t=>t.trim()).filter(Boolean)
     };
-    arr.push(novo);
-    await putFile("data.js", utf8ToB64(gerarDataJs(arr)), `Adiciona ${nome}`, sha);
-    setLog(log,"✓ Publicado! O site leva de 1 a 2 minutos para atualizar.","ok");
-    e.target.reset(); $("#previews").innerHTML=""; $("#data").value = new Date().toISOString().slice(0,10); $("#cor").value="#7c5cff";
+    let msg;
+    if(editando){
+      const idx = arr.findIndex(b=>b.nome===editando.nome && b.data===editando.data);
+      if(idx<0) throw new Error("Não encontrei o boneco original para atualizar. Recarregue a lista e tente de novo.");
+      arr[idx] = { ...arr[idx], ...campos, fotos: finais.length?finais:undefined, foto: undefined };
+      msg = `Edita ${nome}`;
+    }else{
+      arr.push({ ...campos, ...(finais.length?{fotos:finais}:{}) });
+      msg = `Adiciona ${nome}`;
+    }
+    await putFile("data.js", utf8ToB64(gerarDataJs(arr)), msg, sha);
+    // só depois de salvar o catálogo, apaga do repositório as fotos que foram removidas
+    if(editando){
+      for(const p of editando.fotos.filter(p=>!finais.includes(p) && p.startsWith("fotos/"))){
+        try{ const f = await getFile(p); if(f) await gh(`contents/${p}`, { method:"DELETE", body: JSON.stringify({ message:`Remove foto de ${nome}`, sha:f.sha, branch:cfg.branch }) }); }catch(_){}
+      }
+    }
+    setLog(log, (editando?"✓ Alterações salvas!":"✓ Publicado!")+" O site leva de 1 a 2 minutos para atualizar.","ok");
+    aviso(editando?"Alterações salvas":"Boneco publicado");
+    limparForm();
     carregarLista();
   }catch(err){ setLog(log,"✗ "+err.message,"err"); }
   btn.disabled = false;

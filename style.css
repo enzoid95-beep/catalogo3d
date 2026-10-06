@@ -249,3 +249,39 @@ h1 .l1,h1 .l2{
   .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
   .body{padding:12px}
 }
+
+/* =========================================================
+   MELHORIAS v8: entrada suave dos cards, selo "Novo",
+   navegação entre bonecos, foco visível e resultado da busca
+   ========================================================= */
+@keyframes cardEntra{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.card{animation:cardEntra .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0ms)}
+.card:focus-visible,.chip:focus-visible,.nav:focus-visible,.lb-close:focus-visible,.lb-nav button:focus-visible,.limpar:focus-visible{
+  outline:3px solid var(--c2);outline-offset:3px;
+}
+.novo{
+  position:absolute;top:12px;right:12px;z-index:1;padding:5px 12px;border-radius:999px;
+  font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1a0f00;
+  background:linear-gradient(90deg,var(--c2),#ffd86b);
+  box-shadow:0 2px 0 rgba(0,0,0,.45),0 6px 14px -4px rgba(255,182,39,.7);
+}
+.thumb:has(.count) .novo{top:44px}
+.resultado{min-height:1.2em;margin:-14px 0 14px;font-size:.85rem;color:var(--muted);-webkit-text-fill-color:currentColor}
+.empty .limpar,.limpar{
+  margin-top:14px;border:1px solid rgba(255,255,255,.35);background:#251d55;color:#fff;
+  padding:9px 18px;border-radius:999px;font:inherit;font-size:.9rem;cursor:pointer;transition:.2s;
+  -webkit-text-fill-color:#fff;
+}
+.limpar:hover{background:linear-gradient(90deg,var(--c1),var(--c4));border-color:transparent}
+.lb-nav{
+  margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding-top:16px;border-top:1px solid rgba(255,255,255,.14);
+}
+.lb-nav span{font-size:.8rem;color:var(--muted);-webkit-text-fill-color:currentColor}
+.lb-nav button{
+  border:1px solid rgba(255,255,255,.3);background:#251d55;color:#fff;padding:8px 14px;border-radius:999px;
+  font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:.2s;
+}
+.lb-nav button:hover{background:linear-gradient(90deg,var(--c1),var(--c4));border-color:transparent}
+@media(max-width:720px){.lb-nav{margin-top:8px}.novo{top:8px;right:8px;font-size:.62rem;padding:4px 9px}.thumb:has(.count) .novo{top:38px}}
+@media (prefers-reduced-motion:reduce){.card{animation:none}.card,.thumb img{transition:none}}

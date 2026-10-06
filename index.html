@@ -4,9 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Impressões 3D - Alfredo Leiras</title>
+  <meta name="description" content="Coleção de bonecos e peças impressos em 3D por Alfredo Leiras.">
+  <meta name="theme-color" content="#0f0b1e">
+  <meta property="og:title" content="Impressões 3D - Alfredo Leiras">
+  <meta property="og:description" content="Coleção de bonecos e peças impressos em 3D.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧸%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
   <header class="hero">
@@ -28,8 +33,12 @@
       </select>
     </section>
 
+    <p class="resultado" id="resultado" aria-live="polite"></p>
     <section class="grid" id="grid"></section>
-    <p class="empty" id="empty" hidden>Nenhum boneco encontrado 😢</p>
+    <div class="empty" id="empty" hidden>
+      <p>Nenhum boneco encontrado 😢</p>
+      <button class="limpar" id="limpar" type="button">Limpar busca</button>
+    </div>
   </main>
 
   <div class="lightbox" id="lightbox" hidden>
@@ -43,6 +52,6 @@
   <footer>Feito com ♥ e filamento · <span id="year"></span></footer>
 
   <script src="data.js"></script>
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
