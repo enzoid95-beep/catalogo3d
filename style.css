@@ -1,5 +1,5 @@
 :root{
-  --bg:#0f0b1e;
+  --bg:#0e1710;
   --bg2:#17122e;
   --card:#1d1740;
   --text:#ffffff;
@@ -15,8 +15,8 @@ body{
   font-family:'Poppins',system-ui,sans-serif;
   background:url(bg.svg?v=3) 0 0/600px 600px repeat,
              url(bg.svg?v=3) 173px 291px/437px 437px repeat,
-             radial-gradient(1200px 600px at 10% -10%,#2a1a63 0%,transparent 60%),
-             radial-gradient(900px 500px at 100% 0%,#4a1646 0%,transparent 55%),
+             radial-gradient(1200px 600px at 10% -10%,#27402a 0%,transparent 60%),
+             radial-gradient(900px 500px at 100% 0%,#3b3f1c 0%,transparent 55%),
              var(--bg);
   color:var(--text);
   min-height:100vh;
@@ -285,3 +285,10 @@ h1 .l1,h1 .l2{
 .lb-nav button:hover{background:linear-gradient(90deg,var(--c1),var(--c4));border-color:transparent}
 @media(max-width:720px){.lb-nav{margin-top:8px}.novo{top:8px;right:8px;font-size:.62rem;padding:4px 9px}.thumb:has(.count) .novo{top:38px}}
 @media (prefers-reduced-motion:reduce){.card{animation:none}.card,.thumb img{transition:none}}
+
+/* v9: fundo verde musgo; título e subtítulo sem a extrusão 3D (só relevo suave) */
+html{background:#0e1710}
+.lightbox{background:rgba(6,12,8,.86)}
+h1{
+  filter:drop-shadow(0 -1px 0 rgba(255,255,255,.28)) drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 8px 10px rgba(0,0,0,.4));
+}
